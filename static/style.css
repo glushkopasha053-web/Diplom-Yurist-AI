@@ -1316,3 +1316,188 @@ body::before {
     transform: scale(1.05);
 
 }
+
+/* =========================
+   MOBILE ADAPTIVE
+========================= */
+
+@media (max-width: 768px) {
+
+    body {
+        background-position: center;
+        overflow-x: hidden;
+    }
+
+    .container {
+
+        margin-left: 0;
+
+        padding: 90px 15px 30px 15px;
+
+        max-width: 100%;
+    }
+
+    .hero {
+
+        height: auto;
+
+        padding-top: 120px;
+
+        padding-bottom: 60px;
+    }
+
+    .hero h1 {
+
+        font-size: 42px;
+
+        line-height: 1.2;
+    }
+
+    .hero p {
+
+        font-size: 18px;
+
+        padding: 0 10px;
+    }
+
+    .hero button {
+
+        width: 100%;
+
+        max-width: 300px;
+
+        font-size: 18px;
+    }
+
+    .chat-box {
+
+        height: 55vh;
+
+        padding: 15px;
+
+        border-radius: 18px;
+    }
+
+    .user-message,
+    .bot-message {
+
+        max-width: 90%;
+
+        font-size: 15px;
+    }
+
+    .input-area {
+
+        flex-direction: column;
+    }
+
+    .input-area input {
+
+        width: 100%;
+
+        box-sizing: border-box;
+    }
+
+    .input-area button {
+
+        width: 100%;
+    }
+
+    .quick-buttons {
+
+        flex-direction: column;
+    }
+
+    .quick-buttons button {
+
+        width: 100%;
+    }
+
+    .services-grid {
+
+        grid-template-columns: 1fr;
+    }
+
+    .documents-grid {
+
+        grid-template-columns: 1fr;
+    }
+
+    .news-panel {
+
+        position: relative;
+
+        width: 100%;
+
+        right: 0;
+
+        top: 0;
+
+        height: auto;
+
+        margin-top: 20px;
+
+        box-sizing: border-box;
+    }
+
+    .clock-box {
+
+        top: 15px;
+
+        right: 15px;
+
+        min-width: 110px;
+
+        padding: 10px 15px;
+    }
+
+    #clock-time {
+
+        font-size: 22px;
+    }
+
+    #clock-date {
+
+        font-size: 12px;
+    }
+
+    .sidebar {
+
+        width: 260px;
+    }
+
+    .open-sidebar {
+
+        width: 50px;
+
+        height: 50px;
+
+        font-size: 24px;
+    }
+
+    .weather-grid {
+
+        grid-template-columns: 1fr;
+    }
+
+    .weather-city {
+
+        font-size: 28px;
+    }
+
+    .weather-temp {
+
+        font-size: 42px;
+    }
+
+    .download-buttons {
+
+        flex-direction: column;
+    }
+
+    .download-btn {
+
+        width: 100%;
+    }
+
+}
