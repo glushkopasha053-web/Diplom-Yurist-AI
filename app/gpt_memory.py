@@ -9,6 +9,7 @@ from openai import OpenAI
 
 from app.database import save_knowledge
 
+import os
 
 # ============================================
 # OPENAI CLIENT
@@ -20,6 +21,7 @@ client = OpenAI(
 
 )
 
+#api_key = os.getenv("OPENAI_API_KEY")
 
 # ============================================
 # GPT ВІДПОВІДЬ
