@@ -1,0 +1,6 @@
+services:
+  - type: web
+    name: pavlo_glushko_lawyer_ai
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn main:app
