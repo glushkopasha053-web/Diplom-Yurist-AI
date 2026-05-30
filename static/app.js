@@ -45,32 +45,35 @@ const translations = {
       menuAbout:
       "ℹ Про програму",
 
-menuSettings:
-"⚙ Налаштування",
+     menuSettings:
+     "⚙ Налаштування",
 
-chatTitle:
-"⚖ Юридичний AI-помічник",
+     menuGame:
+     "🎮 Гра",
 
-chatSubtitle:
-"Інтелектуальна система юридичних консультацій",
+     chatTitle:
+     "⚖ Юридичний AI-помічник",
 
-welcomeMessage:
-"Вітаю. Я юридичний AI-помічник. Поставте ваше питання.",
+     chatSubtitle:
+     "Інтелектуальна система юридичних консультацій",
 
-documentsTitle:
-"📄 Документи",
+    welcomeMessage:
+    "Вітаю. Я юридичний AI-помічник. Поставте ваше питання.",
 
-templatesTitle:
-"Доступні шаблони",
+    documentsTitle:
+    "📄 Документи",
 
-aboutTitle:
-"ℹ Про програму",
+    templatesTitle:
+    "Доступні шаблони",
 
-aboutText1:
-"Юрист AI — це система юридичних консультацій, створена на Flask + AI API.",
+    aboutTitle:
+    "ℹ Про програму",
 
-aboutText2:
-"Програма допомагає:"
+    aboutText1:
+    "Юрист AI — це система юридичних консультацій, створена на Flask + AI API.",
+
+    aboutText2:
+    "Програма допомагає:"
 
     },
 
@@ -121,6 +124,9 @@ menuAbout:
 
 menuSettings:
 "⚙ Settings",
+
+menuGame:
+"🎮 Game",
 
 chatTitle:
 "⚖ Legal AI Assistant",
@@ -180,6 +186,9 @@ function changeLanguage() {
     document.getElementById("menu-settings").innerHTML =
     translations[lang].menuSettings;
 
+    document.getElementById("menu-game").innerHTML =
+    translations[lang].menuGame;
+
     // CHAT
 
     document.getElementById("user-input").placeholder =
@@ -189,31 +198,13 @@ function changeLanguage() {
     translations[lang].sendButton;
 
     document.getElementById("chat-title").innerHTML =
-translations[lang].chatTitle;
+    translations[lang].chatTitle;
 
-document.getElementById("chat-subtitle").innerHTML =
-translations[lang].chatSubtitle;
+    document.getElementById("chat-subtitle").innerHTML =
+    translations[lang].chatSubtitle;
 
-document.getElementById("welcome-message").innerHTML =
-translations[lang].welcomeMessage;
-
-document.getElementById("quick-will").innerHTML =
-translations[lang].quickWill;
-
-document.getElementById("quick-divorce").innerHTML =
-translations[lang].quickDivorce;
-
-document.getElementById("quick-accident").innerHTML =
-translations[lang].quickAccident;
-
-document.getElementById("quick-motion").innerHTML =
-translations[lang].quickMotion;
-
-document.getElementById("quick-theft").innerHTML =
-translations[lang].quickTheft;
-
-document.getElementById("quick-court").innerHTML =
-translations[lang].quickCourt;
+    document.getElementById("welcome-message").innerHTML =
+    translations[lang].welcomeMessage;
 
     // SETTINGS
 
@@ -227,19 +218,19 @@ translations[lang].quickCourt;
     translations[lang].languageTitle;
 
     document.getElementById("documents-title").innerHTML =
-translations[lang].documentsTitle;
+    translations[lang].documentsTitle;
 
-document.getElementById("templates-title").innerHTML =
-translations[lang].templatesTitle;
+    document.getElementById("templates-title").innerHTML =
+    translations[lang].templatesTitle;
 
-document.getElementById("about-title").innerHTML =
-translations[lang].aboutTitle;
+    document.getElementById("about-title").innerHTML =
+    translations[lang].aboutTitle;
 
-document.getElementById("about-text-1").innerHTML =
-translations[lang].aboutText1;
+    document.getElementById("about-text-1").innerHTML =
+    translations[lang].aboutText1;
 
-document.getElementById("about-text-2").innerHTML =
-translations[lang].aboutText2;
+    document.getElementById("about-text-2").innerHTML =
+    translations[lang].aboutText2;
 
     // THEME BUTTON
 
@@ -981,4 +972,634 @@ function openECourt() {
 
     );
 
+}
+
+// =========================
+// LAW RUNNER GAME
+// =========================
+
+const playerImage = new Image();
+
+playerImage.src = "/static/assets/player.png";
+
+const obstacleImage = new Image();
+obstacleImage.src = "/static/assets/obstacle.png";
+
+const backgroundImage = new Image();
+backgroundImage.src = "/static/assets/background.png";
+
+const groundImage = new Image();
+groundImage.src = "/static/assets/ground.png";
+// Знаходимо canvas
+
+const canvas =
+document.getElementById("gameCanvas");
+
+
+// Отримуємо 2D режим малювання
+
+const ctx =
+canvas.getContext("2d");
+// =========================
+// PLAYER
+// =========================
+
+let player = {
+
+    // позиція X
+    x: 80,
+
+    // позиція Y
+    y: 220,
+
+    // ширина
+    width: 50,
+
+    // висота
+    height: 50,
+
+    // швидкість стрибка
+    velocityY: 0,
+
+    // чи стрибає
+    jumping: false
+};
+// =========================
+// GAME PHYSICS
+// =========================
+
+
+// сила тяжіння
+
+let gravity = 1.7;
+
+
+// чи запущена гра
+
+let gameStarted = false;
+
+
+// масив перешкод
+
+let obstacles = [];
+
+
+// очки
+
+let score = 0;
+let bestScore =
+Number(localStorage.getItem("bestScore")) || 0;
+let gameLoopId = null;
+
+// =========================
+// START GAME
+// =========================
+
+function startGame() {
+
+    // показуємо canvas
+
+    canvas.style.display = "block";
+    
+    document.getElementById("gameStartBtn")
+    .style.display = "none";
+
+    // очищаємо перешкоди
+
+    obstacles = [];
+
+
+    // скидаємо очки
+
+    score = 0;
+
+
+    // повертаємо гравця
+
+    player.y = 330;
+
+
+    // запускаємо гру
+
+    gameStarted = true;
+
+    // запускаємо цикл гри
+    if (!gameLoopId) {
+    gameLoopId = requestAnimationFrame(gameLoop);
+}
+}
+// ==========================
+// GAME LOOP
+// ==========================
+
+function gameLoop() {
+
+    ctx.drawImage(
+        backgroundImage,
+        0,
+        0,
+        canvas.width,
+        canvas.height
+);
+    drawClouds();
+
+    // малюємо землю
+    drawGround();
+
+    // оновлюємо гравця
+    updatePlayer();
+
+    // малюємо гравця
+    drawPlayer();
+
+    // запускаємо наступний кадр
+    if (gameStarted) {
+    gameLoopId = requestAnimationFrame(gameLoop);
+} else {
+    gameLoopId = null;
+}
+
+updateObstacles();
+
+drawObstacles();
+
+ctx.fillStyle = "white";
+
+ctx.font = "24px Arial";
+
+ctx.fillText(
+    "Очки: " + Math.floor(score),
+    20,
+    40
+);
+ctx.fillText(
+    "Рекорд: " + bestScore,
+    20,
+    70
+);
+    updateCoins();
+    drawCoins();
+}
+
+// ==========================
+// GROUND
+// ==========================
+
+function drawGround() {
+
+    ctx.drawImage(
+        groundImage,
+        0,
+        390,
+        canvas.width,
+        60
+    );
+}
+
+// ==========================
+// PLAYER PHYSICS
+// ==========================
+
+function updatePlayer() {
+
+    // додаємо гравітацію
+    player.velocityY += gravity;
+
+    // рухаємо вниз
+    player.y += player.velocityY;
+
+    // якщо впав на землю
+    if (player.y >= 330) {
+
+        // ставимо назад
+        player.y = 330;
+
+        // обнуляємо швидкість
+        player.velocityY = 0;
+
+        // більше не стрибає
+        player.jumping = false;
+    }
+}
+
+function drawPlayer() {
+
+    ctx.drawImage(
+        playerImage,
+        player.x,
+        player.y,
+        player.width,
+        player.height
+    );
+}
+// ==========================
+// JUMP
+// ==========================
+
+document.addEventListener("keydown", function(event) {
+
+    // якщо натиснули SPACE
+    if (event.code === "Space") {
+
+        // якщо не стрибає
+        if (!player.jumping) {
+
+            // стрибок
+            player.velocityY = -19;
+
+            // тепер стрибає
+            player.jumping = true;
+        }
+    }
+});
+
+//ПЕРЕШКОДИ
+function createObstacle() {
+
+    obstacles.push({
+        x: canvas.width,
+        y: 350,
+        width: 30,
+        height: 40
+    });
+}
+//МАЛЮВАННЯ ПЕРЕШКОД
+function drawObstacles() {
+
+    ctx.shadowColor = "red";
+    ctx.shadowBlur = 20;
+
+    ctx.fillStyle = "#ff3b3b";
+
+    for (let i = 0; i < obstacles.length; i++) {
+
+        let obs = obstacles[i];
+
+        ctx.drawImage(
+        obstacleImage,
+        obs.x,
+        obs.y,
+        obs.width,
+        obs.height
+);
+    }
+}
+//РУХ ПЕРЕШКОД
+function updateObstacles() {
+
+    for (let i = 0; i < obstacles.length; i++) {
+
+        let speed = 6 + score / 300;
+
+        obstacles[i].x -= speed;
+
+        if (
+            player.x < obstacles[i].x + obstacles[i].width &&
+            player.x + player.width > obstacles[i].x &&
+            player.y < obstacles[i].y + obstacles[i].height &&
+            player.y + player.height > obstacles[i].y
+        ) {
+            gameOver();
+        }
+    }
+
+    obstacles = obstacles.filter(
+        obstacle => obstacle.x + obstacle.width > 0
+    );
+
+    score += 0.1;
+}
+    
+let obstacleSpawn = 2800;
+
+function obstacleSpawner() {
+
+    if (gameStarted) {
+        createObstacle();
+    }
+
+    // гра стає складнішою
+    if (obstacleSpawn > 1200) {
+        obstacleSpawn -= 20;
+    }
+
+    setTimeout(obstacleSpawner, obstacleSpawn);
+}
+
+obstacleSpawner();
+
+function gameOver() {
+
+    if(!gameStarted) return;
+
+    gameStarted = false;
+if(score > bestScore){
+
+    bestScore = score;
+
+    localStorage.setItem(
+        "bestScore",
+        bestScore
+    );
+}
+
+    alert(
+        "Гру завершено! Очки: "
+        + Math.floor(score)
+    );
+
+    document.getElementById("restartBtn")
+    .style.display = "block";
+}
+
+function startRealGame() {
+
+    document.getElementById("quizBox").style.display = "none";
+
+    startGame();
+}
+// =========================
+// QUIZ QUESTIONS
+// =========================
+
+const quizQuestions = [
+
+{
+    question:
+    "Яка стаття Конституції України гарантує свободу слова?",
+
+    answers: [
+        "Стаття 34",
+        "Стаття 12",
+        "Стаття 99"
+    ],
+
+    correct: 0
+},
+
+{
+    question:
+    "З якого віку в Україні настає кримінальна відповідальність у більшості випадків?",
+
+    answers: [
+        "14 років",
+        "16 років",
+        "18 років"
+    ],
+
+    correct: 1
+},
+
+{
+    question:
+    "Який орган здійснює правосуддя в Україні?",
+
+    answers: [
+        "Поліція",
+        "Прокуратура",
+        "Суд"
+    ],
+
+    correct: 2
+},
+
+{
+    question:
+    "Що означає презумпція невинуватості?",
+
+    answers: [
+        "Людина винна поки не доведе інше",
+        "Людина невинна поки її вину не доведено",
+        "Поліція завжди права"
+    ],
+
+    correct: 1
+},
+
+{
+    question:
+    "Який документ є основним законом України?",
+
+    answers: [
+        "Конституція",
+        "Кримінальний кодекс",
+        "Паспорт"
+    ],
+
+    correct: 0
+},
+    
+{
+    question: "Протягом скількох годин затриману особу мають звільнити або доставити до суду?",
+   
+    answers: [
+        "24 годин",
+        "72 годин",
+        "48 годин"
+        
+    ],
+
+    correct: 1
+},
+{
+    question: "Чи дозволено в Україні подвійне громадянство?",
+    
+    answers: [
+        "Дозволено",
+        "Не дозволено",
+    ],
+
+    correct: 0
+}
+
+];
+
+let currentQuiz = null;
+
+function loadQuiz() {
+
+    // випадкове питання
+    const randomIndex =
+    Math.floor(Math.random() * quizQuestions.length);
+
+    currentQuiz = quizQuestions[randomIndex];
+
+    // питання
+    document.getElementById("quizQuestion").innerText =
+    currentQuiz.question;
+
+    // контейнер кнопок
+    const answersDiv =
+    document.getElementById("quizAnswers");
+
+    answersDiv.innerHTML = "";
+
+    // створення кнопок
+    currentQuiz.answers.forEach((answer, index) => {
+
+        answersDiv.innerHTML += `
+
+            <button onclick="checkQuiz(${index})">
+
+                ${answer}
+
+            </button>
+
+        `;
+
+    });
+
+}
+
+function checkQuiz(answerIndex) {
+
+    if(answerIndex === currentQuiz.correct) {
+
+        alert("✅ Правильно!");
+
+        document.getElementById("gameStartBtn")
+        .style.display = "block";
+
+    } else {
+
+        alert("❌ Неправильно!");
+
+    }
+
+}
+
+function wrongQuiz() {
+
+    alert("❌ Неправильно!");
+}
+loadQuiz();
+
+function restartGame() {
+
+    // очищаємо перешкоди
+    obstacles = [];
+
+    // скидаємо очки
+    score = 0;
+
+    // повертаємо гравця
+    player.y = 330;
+
+    player.velocityY = 0;
+
+    player.jumping = false;
+
+    // запускаємо гру
+    gameStarted = true;
+
+    // ховаємо кнопку
+    document.getElementById("restartBtn")
+    .style.display = "none";
+
+    // запускаємо тільки ОДИН loop
+    if (!gameLoopId) {
+        gameLoopId = requestAnimationFrame(gameLoop);
+    }
+}
+
+let coins = [];
+
+function createCoin() {
+    coins.push({
+        x: canvas.width,
+        y: Math.random() * 180 + 120
+    });
+}
+
+setInterval(createCoin, 2000);
+function drawCoins() {
+
+    for(let coin of coins){
+
+        ctx.shadowColor = "gold";
+        ctx.shadowBlur = 20;
+
+        ctx.beginPath();
+
+        ctx.fillStyle = "gold";
+
+        ctx.arc(
+            coin.x,
+            coin.y,
+            12,
+            0,
+            Math.PI * 2
+        );
+
+        ctx.fill();
+    }
+}
+function updateCoins(){
+
+    for(let i=0;i<coins.length;i++){
+
+        coins[i].x -= 9;
+
+        let dx = player.x + 25 - coins[i].x;
+        let dy = player.y + 25 - coins[i].y;
+
+        if(Math.sqrt(dx*dx + dy*dy) < 30){
+
+            score += 50;
+
+            coins.splice(i,1);
+
+            i--;
+        }
+    }
+coins = coins.filter(
+    coin => coin.x > -20
+);
+
+}
+function createObstacle() {
+
+    let randomHeight =
+        Math.random() * 25 + 20;
+
+    obstacles.push({
+
+        x: canvas.width,
+
+        y: 390 - randomHeight,
+
+        width: 30,
+
+        height: randomHeight
+    });
+}
+let clouds = [];
+
+for(let i=0;i<5;i++){
+
+    clouds.push({
+        x: Math.random()*canvas.width,
+        y: Math.random()*150
+    });
+}
+function drawClouds(){
+
+    ctx.fillStyle =
+        "rgba(255,255,255,0.5)";
+
+    for(let cloud of clouds){
+
+        cloud.x -= 0.5;
+
+        if(cloud.x < -100){
+
+            cloud.x = canvas.width;
+        }
+
+        ctx.beginPath();
+ctx.arc(cloud.x, cloud.y, 25, 0, Math.PI * 2);
+ctx.arc(cloud.x + 20, cloud.y - 10, 30, 0, Math.PI * 2);
+ctx.arc(cloud.x + 45, cloud.y, 25, 0, Math.PI * 2);
+ctx.fill();
+    }
 }

@@ -31,6 +31,14 @@ id="menu-documents">
     📄 Документи
 </button>
 
+<button class="menu-btn"
+onclick="showSection('game-section')"
+id="menu-game">
+
+    🎮 Гра
+
+</button>
+
 <button
 class="menu-btn"
 onclick="showSection('weather-section')">
@@ -444,10 +452,63 @@ class="content-section hidden">
 
 </div>
 
+<div id="game-section" class="content-section hidden">
+
+    <div class="info-card">
+
+        <h2>🎮 Law Runner</h2>
+
+        <p>
+            Перестрибуй незаконні перешкоди
+            та набирай юридичні очки ⚖️
+        </p>
+
+        <!-- QUIZ -->
+        <div id="quizBox">
+
+            <h2>🧠 Юридична загадка</h2>
+
+            <p id="quizQuestion">
+        Завантаження питання...
+            </p>
+
+        <div id="quizAnswers"></div>
+
+</div>
+
+        <!-- GAME -->
+
+        <button
+            id="gameStartBtn"
+            style="display:none;"
+            onclick="startGame()">
+
+            ▶ Почати гру
+
+        </button>
+
+        <button
+    id="restartBtn"
+    style="display:none;"
+    onclick="restartGame()">
+
+    🔄 Перезапуск
+
+        </button>
+
+        <canvas
+            id="gameCanvas"
+            width="1100"
+            height="450">
+        </canvas>
+
+    </div>
+
+</div>
+
+
+
 <script>
-
-
-
 </script>
 
 <script src="/static/app.js"></script>

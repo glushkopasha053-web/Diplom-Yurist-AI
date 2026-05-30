@@ -1501,3 +1501,27 @@ body::before {
     }
 
 }
+
+/* =========================
+   LAW GAME
+========================= */
+
+#gameCanvas {
+
+    width: 100%;
+
+    max-width: 1200px;
+
+    height: 450px;
+
+    border-radius: 20px;
+
+    border: 3px solid #3b82f6;
+
+    background: #111827;
+
+    margin-top: 20px;
+
+    display: block;
+}
+
