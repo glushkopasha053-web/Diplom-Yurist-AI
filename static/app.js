@@ -1,455 +1,353 @@
 const translations = {
+  uk: {
+    heroTitle: "⚖ Юридичний AI-помічник",
 
-    uk: {
+    heroSubtitle: "Інтелектуальна система юридичних консультацій",
 
-        heroTitle: "⚖ Юридичний AI-помічник",
+    heroButton: "Почати консультацію",
 
-        heroSubtitle:
-        "Інтелектуальна система юридичних консультацій",
+    inputPlaceholder: "Введіть юридичне питання",
 
-        heroButton:
-        "Почати консультацію",
+    sendButton: "Надіслати",
 
-        inputPlaceholder:
-        "Введіть юридичне питання",
+    settingsTitle: "⚙ Налаштування",
 
-        sendButton:
-        "Надіслати",
+    themeTitle: "Тема",
 
-        settingsTitle:
-        "⚙ Налаштування",
+    languageTitle: "Мова",
 
-        themeTitle:
-        "Тема",
+    darkTheme: "🌙 Темна тема",
 
-        languageTitle:
-        "Мова",
+    lightTheme: "☀ Світла тема",
 
-        darkTheme:
-        "🌙 Темна тема",
+    logoText: "⚖ Юрист AI",
 
-        lightTheme:
-        "☀ Світла тема"
+    menuChat: "💬 Чат",
 
-        ,
+    menuDocuments: "📄 Документи",
 
-       logoText:
-       "⚖ Юрист AI",
+    menuAbout: "ℹ Про програму",
 
-       menuChat:
-       "💬 Чат",
+    menuSettings: "⚙ Налаштування",
 
-      menuDocuments:
-      "📄 Документи",
+    menuGame: "🎮 Гра",
 
-      menuAbout:
-      "ℹ Про програму",
+    chatTitle: "⚖ Юридичний AI-помічник",
 
-     menuSettings:
-     "⚙ Налаштування",
+    chatSubtitle: "Інтелектуальна система юридичних консультацій",
 
-     menuGame:
-     "🎮 Гра",
+    welcomeMessage: "Вітаю. Я юридичний AI-помічник. Поставте ваше питання.",
 
-     chatTitle:
-     "⚖ Юридичний AI-помічник",
+    documentsTitle: "📄 Документи",
 
-     chatSubtitle:
-     "Інтелектуальна система юридичних консультацій",
+    templatesTitle: "Доступні шаблони",
 
-    welcomeMessage:
-    "Вітаю. Я юридичний AI-помічник. Поставте ваше питання.",
-
-    documentsTitle:
-    "📄 Документи",
-
-    templatesTitle:
-    "Доступні шаблони",
-
-    aboutTitle:
-    "ℹ Про програму",
+    aboutTitle: "ℹ Про програму",
 
     aboutText1:
-    "Юрист AI — це система юридичних консультацій, створена на Flask + AI API.",
+      "Юрист AI — це система юридичних консультацій, створена на Flask + AI API.",
 
-    aboutText2:
-    "Програма допомагає:"
+    aboutText2: "Програма допомагає:",
+  },
 
-    },
+  en: {
+    heroTitle: "⚖ Legal AI Assistant",
 
-    en: {
+    heroSubtitle: "Intelligent legal consultation system",
 
-        heroTitle:
-        "⚖ Legal AI Assistant",
+    heroButton: "Start consultation",
 
-        heroSubtitle:
-        "Intelligent legal consultation system",
+    inputPlaceholder: "Enter your legal question",
 
-        heroButton:
-        "Start consultation",
+    sendButton: "Send",
 
-        inputPlaceholder:
-        "Enter your legal question",
+    settingsTitle: "⚙ Settings",
 
-        sendButton:
-        "Send",
+    themeTitle: "Theme",
 
-        settingsTitle:
-        "⚙ Settings",
+    languageTitle: "Language",
 
-        themeTitle:
-        "Theme",
+    darkTheme: "🌙 Dark theme",
 
-        languageTitle:
-        "Language",
+    lightTheme: "☀ Light theme",
+    logoText: "⚖ Lawyer AI",
 
-        darkTheme:
-        "🌙 Dark theme",
+    menuChat: "💬 Chat",
 
-        lightTheme:
-        "☀ Light theme"
-        ,
+    menuDocuments: "📄 Documents",
 
-logoText:
-"⚖ Lawyer AI",
+    menuAbout: "ℹ About",
 
-menuChat:
-"💬 Chat",
+    menuSettings: "⚙ Settings",
 
-menuDocuments:
-"📄 Documents",
+    menuGame: "🎮 Game",
 
-menuAbout:
-"ℹ About",
+    chatTitle: "⚖ Legal AI Assistant",
 
-menuSettings:
-"⚙ Settings",
+    chatSubtitle: "Intelligent legal consultation system",
 
-menuGame:
-"🎮 Game",
+    welcomeMessage: "Hello. I am a legal AI assistant. Ask your question.",
 
-chatTitle:
-"⚖ Legal AI Assistant",
+    documentsTitle: "📄 Documents",
 
-chatSubtitle:
-"Intelligent legal consultation system",
+    templatesTitle: "Available templates",
 
-welcomeMessage:
-"Hello. I am a legal AI assistant. Ask your question.",
+    aboutTitle: "ℹ About",
 
-documentsTitle:
-"📄 Documents",
+    aboutText1:
+      "Lawyer AI is a legal consultation system built with Flask + AI API.",
 
-templatesTitle:
-"Available templates",
-
-aboutTitle:
-"ℹ About",
-
-aboutText1:
-"Lawyer AI is a legal consultation system built with Flask + AI API.",
-
-aboutText2:
-"The program helps:"
-
-    }
+    aboutText2: "The program helps:",
+  },
 };
 
 function changeLanguage() {
+  const lang = document.getElementById("language-select").value;
 
-    const lang =
-    document.getElementById("language-select").value;
+  // HERO
 
-    // HERO
-
-    document.getElementById("hero-title").innerHTML =
+  document.getElementById("hero-title").innerHTML =
     translations[lang].heroTitle;
 
-    document.getElementById("hero-subtitle").innerHTML =
+  document.getElementById("hero-subtitle").innerHTML =
     translations[lang].heroSubtitle;
 
-    document.getElementById("hero-button").innerHTML =
+  document.getElementById("hero-button").innerHTML =
     translations[lang].heroButton;
 
-    document.getElementById("logo-text").innerHTML =
-    translations[lang].logoText;
+  document.getElementById("logo-text").innerHTML = translations[lang].logoText;
 
-    document.getElementById("menu-chat").innerHTML =
-    translations[lang].menuChat;
+  document.getElementById("menu-chat").innerHTML = translations[lang].menuChat;
 
-    document.getElementById("menu-documents").innerHTML =
+  document.getElementById("menu-documents").innerHTML =
     translations[lang].menuDocuments;
 
-    document.getElementById("menu-about").innerHTML =
+  document.getElementById("menu-about").innerHTML =
     translations[lang].menuAbout;
 
-    document.getElementById("menu-settings").innerHTML =
+  document.getElementById("menu-settings").innerHTML =
     translations[lang].menuSettings;
 
-    document.getElementById("menu-game").innerHTML =
-    translations[lang].menuGame;
+  document.getElementById("menu-game").innerHTML = translations[lang].menuGame;
 
-    // CHAT
+  // CHAT
 
-    document.getElementById("user-input").placeholder =
+  document.getElementById("user-input").placeholder =
     translations[lang].inputPlaceholder;
 
-    document.getElementById("send-button").innerHTML =
+  document.getElementById("send-button").innerHTML =
     translations[lang].sendButton;
 
-    document.getElementById("chat-title").innerHTML =
+  document.getElementById("chat-title").innerHTML =
     translations[lang].chatTitle;
 
-    document.getElementById("chat-subtitle").innerHTML =
+  document.getElementById("chat-subtitle").innerHTML =
     translations[lang].chatSubtitle;
 
-    document.getElementById("welcome-message").innerHTML =
+  document.getElementById("welcome-message").innerHTML =
     translations[lang].welcomeMessage;
 
-    // SETTINGS
+  // SETTINGS
 
-    document.getElementById("settings-title").innerHTML =
+  document.getElementById("settings-title").innerHTML =
     translations[lang].settingsTitle;
 
-    document.getElementById("theme-title").innerHTML =
+  document.getElementById("theme-title").innerHTML =
     translations[lang].themeTitle;
 
-    document.getElementById("language-title").innerHTML =
+  document.getElementById("language-title").innerHTML =
     translations[lang].languageTitle;
 
-    document.getElementById("documents-title").innerHTML =
+  document.getElementById("documents-title").innerHTML =
     translations[lang].documentsTitle;
 
-    document.getElementById("templates-title").innerHTML =
+  document.getElementById("templates-title").innerHTML =
     translations[lang].templatesTitle;
 
-    document.getElementById("about-title").innerHTML =
+  document.getElementById("about-title").innerHTML =
     translations[lang].aboutTitle;
 
-    document.getElementById("about-text-1").innerHTML =
+  document.getElementById("about-text-1").innerHTML =
     translations[lang].aboutText1;
 
-    document.getElementById("about-text-2").innerHTML =
+  document.getElementById("about-text-2").innerHTML =
     translations[lang].aboutText2;
 
-    // THEME BUTTON
+  // THEME BUTTON
 
-    const themeBtn =
-    document.getElementById("theme-btn");
+  const themeBtn = document.getElementById("theme-btn");
 
-    if(document.body.classList.contains("light-theme")) {
+  if (document.body.classList.contains("light-theme")) {
+    themeBtn.innerHTML = translations[lang].lightTheme;
+  } else {
+    themeBtn.innerHTML = translations[lang].darkTheme;
+  }
 
-        themeBtn.innerHTML =
-        translations[lang].lightTheme;
+  // SAVE LANGUAGE
 
-    } else {
-
-        themeBtn.innerHTML =
-        translations[lang].darkTheme;
-    }
-
-    // SAVE LANGUAGE
-
-    localStorage.setItem("language", lang);
+  localStorage.setItem("language", lang);
 }
 
-
-document.getElementById("user-input")
-    .addEventListener("keypress", function(event) {
-
-    if(event.key === "Enter") {
-
-        sendMessage();
+document
+  .getElementById("user-input")
+  .addEventListener("keypress", function (event) {
+    if (event.key === "Enter") {
+      sendMessage();
     }
-
-});
+  });
 
 function toggleSidebar() {
+  const sidebar = document.getElementById("sidebar");
 
-    const sidebar = document.getElementById("sidebar");
+  const overlay = document.getElementById("overlay");
 
-    const overlay = document.getElementById("overlay");
+  sidebar.classList.toggle("active");
 
-    sidebar.classList.toggle("active");
-
-    overlay.classList.toggle("active");
+  overlay.classList.toggle("active");
 }
 
 function showSection(sectionId) {
+  // знаходимо всі секції
+  const sections = document.querySelectorAll(".content-section");
 
-    // знаходимо всі секції
-    const sections = document.querySelectorAll(".content-section");
+  // ховаємо всі секції
+  sections.forEach((section) => {
+    section.classList.add("hidden");
+  });
 
-    // ховаємо всі секції
-    sections.forEach(section => {
-        section.classList.add("hidden");
-    });
+  // показуємо потрібну
+  document.getElementById(sectionId).classList.remove("hidden");
 
-    // показуємо потрібну
-    document.getElementById(sectionId).classList.remove("hidden");
-
-    // закриваємо sidebar
-    toggleSidebar();
+  // закриваємо sidebar
+  toggleSidebar();
 }
 
-
-
 function scrollToChat() {
+  const hero = document.querySelector(".hero");
 
-    const hero = document.querySelector(".hero");
+  const mainContent = document.getElementById("main-content");
 
-    const mainContent = document.getElementById("main-content");
+  hero.style.opacity = "0";
 
-    hero.style.opacity = "0";
+  setTimeout(() => {
+    hero.style.display = "none";
 
-    setTimeout(() => {
+    mainContent.classList.remove("hidden");
 
-        hero.style.display = "none";
-
-        mainContent.classList.remove("hidden");
-
-        window.scrollTo({
-            top: 0,
-            behavior: "smooth"
-        });
-
-    }, 400);
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  }, 400);
 }
 
 function toggleTheme() {
+  document.body.classList.toggle("light-theme");
 
-    document.body.classList.toggle("light-theme");
+  const themeBtn = document.getElementById("theme-btn");
 
-    const themeBtn =
-    document.getElementById("theme-btn");
+  const lang = document.getElementById("language-select").value;
 
-    const lang =
-    document.getElementById("language-select").value;
+  if (document.body.classList.contains("light-theme")) {
+    themeBtn.innerHTML = translations[lang].lightTheme;
 
-    if (document.body.classList.contains("light-theme")) {
+    localStorage.setItem("theme", "light");
+  } else {
+    themeBtn.innerHTML = translations[lang].darkTheme;
 
-        themeBtn.innerHTML =
-        translations[lang].lightTheme;
-
-        localStorage.setItem("theme", "light");
-
-    } else {
-
-        themeBtn.innerHTML =
-        translations[lang].darkTheme;
-
-        localStorage.setItem("theme", "dark");
-    }
+    localStorage.setItem("theme", "dark");
+  }
 }
 
-window.onload = function() {
+window.onload = function () {
+  // THEME
 
-    // THEME
+  const savedTheme = localStorage.getItem("theme");
 
-    const savedTheme =
-    localStorage.getItem("theme");
+  if (savedTheme === "light") {
+    document.body.classList.add("light-theme");
 
-    if(savedTheme === "light") {
+    document.getElementById("theme-btn").innerHTML = "☀ Світла тема";
+  }
 
-        document.body.classList.add("light-theme");
+  // LANGUAGE
 
-        document.getElementById("theme-btn").innerHTML =
-        "☀ Світла тема";
-    }
+  const savedLanguage = localStorage.getItem("language");
 
-    // LANGUAGE
+  if (savedLanguage) {
+    document.getElementById("language-select").value = savedLanguage;
 
-    const savedLanguage =
-    localStorage.getItem("language");
-
-    if(savedLanguage) {
-
-        document.getElementById("language-select").value =
-        savedLanguage;
-
-        changeLanguage();
-    }
-}
+    changeLanguage();
+  }
+};
 
 const chatBox = document.getElementById("chat-box");
-const typingLoader =
-document.getElementById("typing-loader");
+const typingLoader = document.getElementById("typing-loader");
 
 // =========================
 // ДОДАВАННЯ ПОВІДОМЛЕННЯ
 // =========================
 
 function addMessage(text, sender) {
+  const messageDiv = document.createElement("div");
 
-    const messageDiv = document.createElement("div");
+  messageDiv.classList.add("message");
 
-    messageDiv.classList.add("message");
+  if (sender === "user") {
+    messageDiv.classList.add("user-message");
+  } else {
+    messageDiv.classList.add("bot-message");
+  }
 
-    if (sender === "user") {
+  messageDiv.innerText = text;
 
-        messageDiv.classList.add("user-message");
+  chatBox.appendChild(messageDiv);
 
-    } else {
-
-        messageDiv.classList.add("bot-message");
-    }
-
-    messageDiv.innerText = text;
-
-    chatBox.appendChild(messageDiv);
-
-    chatBox.scrollTop = chatBox.scrollHeight;
+  chatBox.scrollTop = chatBox.scrollHeight;
 }
-
-
 
 // =========================
 // ВІДПРАВКА ПОВІДОМЛЕННЯ
 // =========================
 
 async function sendMessage(customText = null) {
+  const input = document.getElementById("user-input");
 
-    const input = document.getElementById("user-input");
+  let message = customText || input.value.trim();
 
-    let message = customText || input.value.trim();
+  if (!message) return;
 
-    if (!message) return;
+  // показуємо повідомлення користувача
+  addMessage(message, "user");
 
-    // показуємо повідомлення користувача
-    addMessage(message, "user");
+  // очищаємо input
+  input.value = "";
 
-    // очищаємо input
-    input.value = "";
+  // показуємо loader
+  typingLoader.classList.remove("hidden");
 
-// показуємо loader
-typingLoader.classList.remove("hidden");
+  try {
+    const response = await fetch("/api/chat", {
+      method: "POST",
 
-    try {
+      headers: {
+        "Content-Type": "application/json",
+      },
 
-        const response = await fetch("/api/chat", {
+      body: JSON.stringify({
+        message: message,
+      }),
+    });
 
-            method: "POST",
+    const data = await response.json();
+    // ховаємо loader
+    typingLoader.classList.add("hidden");
 
-            headers: {
-                "Content-Type": "application/json"
-            },
-
-            body: JSON.stringify({
-                message: message
-            })
-        });
-
-        const data = await response.json();
-        // ховаємо loader
-typingLoader.classList.add("hidden");
-
-        addMessage(data.answer, "bot");
-
-    } catch (error) {
-
-        typingLoader.classList.add("hidden");
-        addMessage("Помилка сервера.", "bot");
-    }
+    addMessage(data.answer, "bot");
+  } catch (error) {
+    typingLoader.classList.add("hidden");
+    addMessage("Помилка сервера.", "bot");
+  }
 }
 
 // =========================
@@ -457,19 +355,16 @@ typingLoader.classList.add("hidden");
 // =========================
 
 function generateDocument(type) {
+  const result = document.getElementById("document-result");
 
-    const result =
-    document.getElementById("document-result");
+  result.classList.remove("hidden");
 
-    result.classList.remove("hidden");
+  // =====================
+  // ПОЗОВ
+  // =====================
 
-    // =====================
-    // ПОЗОВ
-    // =====================
-
-    if(type === "lawsuit") {
-
-        result.innerText = `
+  if (type === "lawsuit") {
+    result.innerText = `
 
 ПОЗОВНА ЗАЯВА
 
@@ -493,16 +388,14 @@ ________________
 Підпис:
 
 `;
+  }
 
-    }
+  // =====================
+  // КЛОПОТАННЯ
+  // =====================
 
-    // =====================
-    // КЛОПОТАННЯ
-    // =====================
-
-    if(type === "motion") {
-
-        result.innerText = `
+  if (type === "motion") {
+    result.innerText = `
 
 КЛОПОТАННЯ
 
@@ -522,16 +415,14 @@ _____________________
 Підпис:
 
 `;
+  }
 
-    }
+  // =====================
+  // СКАРГА
+  // =====================
 
-    // =====================
-    // СКАРГА
-    // =====================
-
-    if(type === "complaint") {
-
-        result.innerText = `
+  if (type === "complaint") {
+    result.innerText = `
 
 СКАРГА
 
@@ -549,16 +440,14 @@ _____________________
 Підпис:
 
 `;
+  }
 
-    }
+  // =====================
+  // ПОЛІЦІЯ
+  // =====================
 
-    // =====================
-    // ПОЛІЦІЯ
-    // =====================
-
-    if(type === "police") {
-
-        result.innerText = `
+  if (type === "police") {
+    result.innerText = `
 
 ЗАЯВА ДО ПОЛІЦІЇ
 
@@ -572,14 +461,13 @@ _____________________
 Підпис:
 
 `;
+  }
 
-    }
+  // =========================
+  // КНОПКИ СКАЧУВАННЯ
+  // =========================
 
-    // =========================
-    // КНОПКИ СКАЧУВАННЯ
-    // =========================
-
-    result.innerHTML += `
+  result.innerHTML += `
 
     <div class="download-buttons">
 
@@ -605,61 +493,57 @@ _____________________
 // =========================
 
 function updateClock() {
+  // створюємо об'єкт часу
+  const now = new Date();
 
-    // створюємо об'єкт часу
-    const now = new Date();
+  // =========================
+  // ЧАС
+  // =========================
 
-    // =========================
-    // ЧАС
-    // =========================
+  // години
+  let hours = now.getHours();
 
-    // години
-    let hours = now.getHours();
+  // хвилини
+  let minutes = now.getMinutes();
 
-    // хвилини
-    let minutes = now.getMinutes();
+  // секунди
+  let seconds = now.getSeconds();
 
-    // секунди
-    let seconds = now.getSeconds();
+  // =========================
+  // ДАТА
+  // =========================
 
-    // =========================
-    // ДАТА
-    // =========================
+  let day = now.getDate();
 
-    let day = now.getDate();
+  let month = now.getMonth() + 1;
 
-    let month = now.getMonth() + 1;
+  let year = now.getFullYear();
 
-    let year = now.getFullYear();
+  // =========================
+  // ДОДАЄМО 0
+  // =========================
 
-    // =========================
-    // ДОДАЄМО 0
-    // =========================
+  // приклад:
+  // 5 -> 05
 
-    // приклад:
-    // 5 -> 05
+  hours = String(hours).padStart(2, "0");
 
-    hours = String(hours).padStart(2, "0");
+  minutes = String(minutes).padStart(2, "0");
 
-    minutes = String(minutes).padStart(2, "0");
+  seconds = String(seconds).padStart(2, "0");
 
-    seconds = String(seconds).padStart(2, "0");
+  day = String(day).padStart(2, "0");
 
-    day = String(day).padStart(2, "0");
+  month = String(month).padStart(2, "0");
 
-    month = String(month).padStart(2, "0");
+  // =========================
+  // ВСТАВКА В HTML
+  // =========================
 
-    // =========================
-    // ВСТАВКА В HTML
-    // =========================
+  document.getElementById("clock-time").innerHTML =
+    `${hours}:${minutes}:${seconds}`;
 
-    document.getElementById("clock-time").innerHTML =
-
-        `${hours}:${minutes}:${seconds}`;
-
-    document.getElementById("clock-date").innerHTML =
-
-        `${day}.${month}.${year}`;
+  document.getElementById("clock-date").innerHTML = `${day}.${month}.${year}`;
 }
 
 // =========================
@@ -676,58 +560,49 @@ updateClock();
 // ========================================
 
 async function loadWeather() {
+  // ------------------------------------
+  // INPUT
+  // ------------------------------------
 
-    // ------------------------------------
-    // INPUT
-    // ------------------------------------
+  const city = document.getElementById("weather-city").value;
 
-    const city = document
-    .getElementById("weather-city")
-    .value;
+  // ------------------------------------
+  // FETCH
+  // ------------------------------------
 
-    // ------------------------------------
-    // FETCH
-    // ------------------------------------
+  const response = await fetch(`/api/weather?city=${city}`);
 
-    const response = await fetch(
+  // ------------------------------------
+  // JSON
+  // ------------------------------------
 
-        `/api/weather?city=${city}`
+  const data = await response.json();
 
-    );
+  // ------------------------------------
+  // RESULT BLOCK
+  // ------------------------------------
 
-    // ------------------------------------
-    // JSON
-    // ------------------------------------
+  const resultDiv = document.getElementById("weather-result");
 
-    const data = await response.json();
+  // ------------------------------------
+  // ERROR
+  // ------------------------------------
 
-    // ------------------------------------
-    // RESULT BLOCK
-    // ------------------------------------
-
-    const resultDiv = document
-    .getElementById("weather-result");
-
-    // ------------------------------------
-    // ERROR
-    // ------------------------------------
-
-    if(data.error) {
-
-        resultDiv.innerHTML = `
+  if (data.error) {
+    resultDiv.innerHTML = `
 
             <p>${data.error}</p>
 
         `;
 
-        return;
-    }
+    return;
+  }
 
-    // ------------------------------------
-    // HTML
-    // ------------------------------------
+  // ------------------------------------
+  // HTML
+  // ------------------------------------
 
-    resultDiv.innerHTML = `
+  resultDiv.innerHTML = `
 
 <div class="weather-card">
 
@@ -835,39 +710,36 @@ async function loadWeather() {
 // ========================================
 
 async function loadNews() {
+  // ------------------------------------
+  // FETCH
+  // ------------------------------------
 
-    // ------------------------------------
-    // FETCH
-    // ------------------------------------
+  const response = await fetch("/api/news");
 
-    const response = await fetch("/api/news");
+  // ------------------------------------
+  // JSON
+  // ------------------------------------
 
-    // ------------------------------------
-    // JSON
-    // ------------------------------------
+  const data = await response.json();
 
-    const data = await response.json();
+  // ------------------------------------
+  // CONTAINER
+  // ------------------------------------
 
-    // ------------------------------------
-    // CONTAINER
-    // ------------------------------------
+  const container = document.getElementById("news-container");
 
-    const container = document
-    .getElementById("news-container");
+  // ------------------------------------
+  // CLEAR
+  // ------------------------------------
 
-    // ------------------------------------
-    // CLEAR
-    // ------------------------------------
+  container.innerHTML = "";
 
-    container.innerHTML = "";
+  // ------------------------------------
+  // LOOP
+  // ------------------------------------
 
-    // ------------------------------------
-    // LOOP
-    // ------------------------------------
-
-    data.forEach(news => {
-
-        container.innerHTML += `
+  data.forEach((news) => {
+    container.innerHTML += `
 
             <div class="news-item">
 
@@ -887,9 +759,7 @@ async function loadNews() {
             </div>
 
         `;
-
-    });
-
+  });
 }
 
 // ========================================
@@ -909,13 +779,7 @@ setInterval(loadNews, 300000);
 // ----------------------------------------
 
 function openPolice() {
-
-    window.open(
-
-        "https://www.npu.gov.ua"
-
-    );
-
+  window.open("https://www.npu.gov.ua");
 }
 
 // ----------------------------------------
@@ -923,13 +787,7 @@ function openPolice() {
 // ----------------------------------------
 
 function openBPD() {
-
-    window.open(
-
-        "https://legalaid.gov.ua"
-
-    );
-
+  window.open("https://legalaid.gov.ua");
 }
 
 // ----------------------------------------
@@ -937,13 +795,7 @@ function openBPD() {
 // ----------------------------------------
 
 function openOmbudsman() {
-
-    window.open(
-
-        "https://ombudsman.gov.ua"
-
-    );
-
+  window.open("https://ombudsman.gov.ua");
 }
 
 // ----------------------------------------
@@ -951,13 +803,7 @@ function openOmbudsman() {
 // ----------------------------------------
 
 function openCourt() {
-
-    window.open(
-
-        "https://court.gov.ua"
-
-    );
-
+  window.open("https://court.gov.ua");
 }
 
 // ----------------------------------------
@@ -965,13 +811,7 @@ function openCourt() {
 // ----------------------------------------
 
 function openECourt() {
-
-    window.open(
-
-        "https://id.court.gov.ua"
-
-    );
-
+  window.open("https://id.court.gov.ua");
 }
 
 // =========================
@@ -992,63 +832,54 @@ const groundImage = new Image();
 groundImage.src = "/static/assets/ground.png";
 // Знаходимо canvas
 
-const canvas =
-document.getElementById("gameCanvas");
-
+const canvas = document.getElementById("gameCanvas");
 
 // Отримуємо 2D режим малювання
 
-const ctx =
-canvas.getContext("2d");
+const ctx = canvas.getContext("2d");
 // =========================
 // PLAYER
 // =========================
 
 let player = {
+  // позиція X
+  x: 80,
 
-    // позиція X
-    x: 80,
+  // позиція Y
+  y: 220,
 
-    // позиція Y
-    y: 220,
+  // ширина
+  width: 50,
 
-    // ширина
-    width: 50,
+  // висота
+  height: 50,
 
-    // висота
-    height: 50,
+  // швидкість стрибка
+  velocityY: 0,
 
-    // швидкість стрибка
-    velocityY: 0,
-
-    // чи стрибає
-    jumping: false
+  // чи стрибає
+  jumping: false,
 };
 // =========================
 // GAME PHYSICS
 // =========================
 
-
 // сила тяжіння
 
 let gravity = 1.7;
-
 
 // чи запущена гра
 
 let gameStarted = false;
 
-
 // масив перешкод
 
 let obstacles = [];
 
-
 // очки
 
 let score = 0;
-let bestScore =
-Number(localStorage.getItem("bestScore")) || 0;
+let bestScore = Number(localStorage.getItem("bestScore")) || 0;
 let gameLoopId = null;
 
 // =========================
@@ -1056,89 +887,69 @@ let gameLoopId = null;
 // =========================
 
 function startGame() {
+  // показуємо canvas
 
-    // показуємо canvas
+  canvas.style.display = "block";
 
-    canvas.style.display = "block";
-    
-    document.getElementById("gameStartBtn")
-    .style.display = "none";
+  document.getElementById("gameStartBtn").style.display = "none";
 
-    // очищаємо перешкоди
+  // очищаємо перешкоди
 
-    obstacles = [];
+  obstacles = [];
 
+  // скидаємо очки
 
-    // скидаємо очки
+  score = 0;
 
-    score = 0;
+  // повертаємо гравця
 
+  player.y = 330;
 
-    // повертаємо гравця
+  // запускаємо гру
 
-    player.y = 330;
+  gameStarted = true;
 
-
-    // запускаємо гру
-
-    gameStarted = true;
-
-    // запускаємо цикл гри
-    if (!gameLoopId) {
+  // запускаємо цикл гри
+  if (!gameLoopId) {
     gameLoopId = requestAnimationFrame(gameLoop);
-}
+  }
 }
 // ==========================
 // GAME LOOP
 // ==========================
 
 function gameLoop() {
+  ctx.drawImage(backgroundImage, 0, 0, canvas.width, canvas.height);
+  drawClouds();
 
-    ctx.drawImage(
-        backgroundImage,
-        0,
-        0,
-        canvas.width,
-        canvas.height
-);
-    drawClouds();
+  // малюємо землю
+  drawGround();
 
-    // малюємо землю
-    drawGround();
+  // оновлюємо гравця
+  updatePlayer();
 
-    // оновлюємо гравця
-    updatePlayer();
+  // малюємо гравця
+  drawPlayer();
 
-    // малюємо гравця
-    drawPlayer();
-
-    // запускаємо наступний кадр
-    if (gameStarted) {
+  // запускаємо наступний кадр
+  if (gameStarted) {
     gameLoopId = requestAnimationFrame(gameLoop);
-} else {
+  } else {
     gameLoopId = null;
-}
+  }
 
-updateObstacles();
+  updateObstacles();
 
-drawObstacles();
+  drawObstacles();
 
-ctx.fillStyle = "white";
+  ctx.fillStyle = "white";
 
-ctx.font = "24px Arial";
+  ctx.font = "24px Arial";
 
-ctx.fillText(
-    "Очки: " + Math.floor(score),
-    20,
-    40
-);
-ctx.fillText(
-    "Рекорд: " + bestScore,
-    20,
-    70
-);
-    updateCoins();
-    drawCoins();
+  ctx.fillText("Очки: " + Math.floor(score), 20, 40);
+  ctx.fillText("Рекорд: " + bestScore, 20, 70);
+  updateCoins();
+  drawCoins();
 }
 
 // ==========================
@@ -1146,14 +957,7 @@ ctx.fillText(
 // ==========================
 
 function drawGround() {
-
-    ctx.drawImage(
-        groundImage,
-        0,
-        390,
-        canvas.width,
-        60
-    );
+  ctx.drawImage(groundImage, 0, 390, canvas.width, 60);
 }
 
 // ==========================
@@ -1161,283 +965,214 @@ function drawGround() {
 // ==========================
 
 function updatePlayer() {
+  // додаємо гравітацію
+  player.velocityY += gravity;
 
-    // додаємо гравітацію
-    player.velocityY += gravity;
+  // рухаємо вниз
+  player.y += player.velocityY;
 
-    // рухаємо вниз
-    player.y += player.velocityY;
+  // якщо впав на землю
+  if (player.y >= 330) {
+    // ставимо назад
+    player.y = 330;
 
-    // якщо впав на землю
-    if (player.y >= 330) {
+    // обнуляємо швидкість
+    player.velocityY = 0;
 
-        // ставимо назад
-        player.y = 330;
-
-        // обнуляємо швидкість
-        player.velocityY = 0;
-
-        // більше не стрибає
-        player.jumping = false;
-    }
+    // більше не стрибає
+    player.jumping = false;
+  }
 }
 
 function drawPlayer() {
-
-    ctx.drawImage(
-        playerImage,
-        player.x,
-        player.y,
-        player.width,
-        player.height
-    );
+  ctx.drawImage(playerImage, player.x, player.y, player.width, player.height);
 }
 // ==========================
 // JUMP
 // ==========================
 
-document.addEventListener("keydown", function(event) {
+document.addEventListener("keydown", function (event) {
+  // якщо натиснули SPACE
+  if (event.code === "Space") {
+    // якщо не стрибає
+    if (!player.jumping) {
+      // стрибок
+      player.velocityY = -19;
 
-    // якщо натиснули SPACE
-    if (event.code === "Space") {
-
-        // якщо не стрибає
-        if (!player.jumping) {
-
-            // стрибок
-            player.velocityY = -19;
-
-            // тепер стрибає
-            player.jumping = true;
-        }
+      // тепер стрибає
+      player.jumping = true;
     }
+  }
 });
 
 //ПЕРЕШКОДИ
 function createObstacle() {
-
-    obstacles.push({
-        x: canvas.width,
-        y: 350,
-        width: 30,
-        height: 40
-    });
+  obstacles.push({
+    x: canvas.width,
+    y: 350,
+    width: 30,
+    height: 40,
+  });
 }
 //МАЛЮВАННЯ ПЕРЕШКОД
 function drawObstacles() {
+  ctx.shadowColor = "red";
+  ctx.shadowBlur = 20;
 
-    ctx.shadowColor = "red";
-    ctx.shadowBlur = 20;
+  ctx.fillStyle = "#ff3b3b";
 
-    ctx.fillStyle = "#ff3b3b";
+  for (let i = 0; i < obstacles.length; i++) {
+    let obs = obstacles[i];
 
-    for (let i = 0; i < obstacles.length; i++) {
-
-        let obs = obstacles[i];
-
-        ctx.drawImage(
-        obstacleImage,
-        obs.x,
-        obs.y,
-        obs.width,
-        obs.height
-);
-    }
+    ctx.drawImage(obstacleImage, obs.x, obs.y, obs.width, obs.height);
+  }
 }
 //РУХ ПЕРЕШКОД
 function updateObstacles() {
+  for (let i = 0; i < obstacles.length; i++) {
+    let speed = 6 + score / 300;
 
-    for (let i = 0; i < obstacles.length; i++) {
+    obstacles[i].x -= speed;
 
-        let speed = 6 + score / 300;
-
-        obstacles[i].x -= speed;
-
-        if (
-            player.x < obstacles[i].x + obstacles[i].width &&
-            player.x + player.width > obstacles[i].x &&
-            player.y < obstacles[i].y + obstacles[i].height &&
-            player.y + player.height > obstacles[i].y
-        ) {
-            gameOver();
-        }
-    }
-
-    obstacles = obstacles.filter(
-        obstacle => obstacle.x + obstacle.width > 0
-    );
-
-    score += 0.1;
+    if (
+    player.x + 15 < obstacles[i].x + obstacles[i].width &&
+    player.x + player.width - 15 > obstacles[i].x &&
+    player.y + 15 < obstacles[i].y + obstacles[i].height &&
+    player.y + player.height - 15 > obstacles[i].y
+) 
+{
+      gameOver();
 }
-    
+  }
+
+  obstacles = obstacles.filter((obstacle) => obstacle.x + obstacle.width > 0);
+
+  score += 0.1;
+}
+
 let obstacleSpawn = 2800;
 
 function obstacleSpawner() {
+  if (gameStarted) {
+    createObstacle();
+  }
 
-    if (gameStarted) {
-        createObstacle();
-    }
+  // гра стає складнішою
+  if (obstacleSpawn > 1200) {
+    obstacleSpawn -= 20;
+  }
 
-    // гра стає складнішою
-    if (obstacleSpawn > 1200) {
-        obstacleSpawn -= 20;
-    }
-
-    setTimeout(obstacleSpawner, obstacleSpawn);
+  setTimeout(obstacleSpawner, obstacleSpawn);
 }
 
 obstacleSpawner();
 
 function gameOver() {
+  if (!gameStarted) return;
 
-    if(!gameStarted) return;
-
-    gameStarted = false;
-if(score > bestScore){
-
+  gameStarted = false;
+  if (score > bestScore) {
     bestScore = score;
 
-    localStorage.setItem(
-        "bestScore",
-        bestScore
-    );
-}
+    localStorage.setItem("bestScore", bestScore);
+  }
 
-    alert(
-        "Гру завершено! Очки: "
-        + Math.floor(score)
-    );
+  alert("Гру завершено! Очки: " + Math.floor(score));
 
-    document.getElementById("restartBtn")
-    .style.display = "block";
+  document.getElementById("restartBtn").style.display = "block";
 }
 
 function startRealGame() {
+  document.getElementById("quizBox").style.display = "none";
 
-    document.getElementById("quizBox").style.display = "none";
-
-    startGame();
+  startGame();
 }
 // =========================
 // QUIZ QUESTIONS
 // =========================
 
 const quizQuestions = [
+  {
+    question: "Яка стаття Конституції України гарантує свободу слова?",
 
-{
+    answers: ["Стаття 34", "Стаття 12", "Стаття 99"],
+
+    correct: 0,
+  },
+
+  {
     question:
-    "Яка стаття Конституції України гарантує свободу слова?",
+      "З якого віку в Україні настає кримінальна відповідальність у більшості випадків?",
+
+    answers: ["14 років", "16 років", "18 років"],
+
+    correct: 1,
+  },
+
+  {
+    question: "Який орган здійснює правосуддя в Україні?",
+
+    answers: ["Поліція", "Прокуратура", "Суд"],
+
+    correct: 2,
+  },
+
+  {
+    question: "Що означає презумпція невинуватості?",
 
     answers: [
-        "Стаття 34",
-        "Стаття 12",
-        "Стаття 99"
+      "Людина винна поки не доведе інше",
+      "Людина невинна поки її вину не доведено",
+      "Поліція завжди права",
     ],
 
-    correct: 0
-},
+    correct: 1,
+  },
 
-{
+  {
+    question: "Який документ є основним законом України?",
+
+    answers: ["Конституція", "Кримінальний кодекс", "Паспорт"],
+
+    correct: 0,
+  },
+
+  {
     question:
-    "З якого віку в Україні настає кримінальна відповідальність у більшості випадків?",
+      "Протягом скількох годин затриману особу мають звільнити або доставити до суду?",
 
-    answers: [
-        "14 років",
-        "16 років",
-        "18 років"
-    ],
+    answers: ["24 годин", "72 годин", "48 годин"],
 
-    correct: 1
-},
-
-{
-    question:
-    "Який орган здійснює правосуддя в Україні?",
-
-    answers: [
-        "Поліція",
-        "Прокуратура",
-        "Суд"
-    ],
-
-    correct: 2
-},
-
-{
-    question:
-    "Що означає презумпція невинуватості?",
-
-    answers: [
-        "Людина винна поки не доведе інше",
-        "Людина невинна поки її вину не доведено",
-        "Поліція завжди права"
-    ],
-
-    correct: 1
-},
-
-{
-    question:
-    "Який документ є основним законом України?",
-
-    answers: [
-        "Конституція",
-        "Кримінальний кодекс",
-        "Паспорт"
-    ],
-
-    correct: 0
-},
-    
-{
-    question: "Протягом скількох годин затриману особу мають звільнити або доставити до суду?",
-   
-    answers: [
-        "24 годин",
-        "72 годин",
-        "48 годин"
-        
-    ],
-
-    correct: 1
-},
-{
+    correct: 1,
+  },
+  {
     question: "Чи дозволено в Україні подвійне громадянство?",
-    
-    answers: [
-        "Дозволено",
-        "Не дозволено",
-    ],
 
-    correct: 0
-}
+    answers: ["Дозволено", "Не дозволено"],
 
+    correct: 0,
+  },
 ];
 
 let currentQuiz = null;
 
 function loadQuiz() {
+  // випадкове питання
+  const randomIndex = Math.floor(Math.random() * quizQuestions.length);
 
-    // випадкове питання
-    const randomIndex =
-    Math.floor(Math.random() * quizQuestions.length);
+  currentQuiz = quizQuestions[randomIndex];
 
-    currentQuiz = quizQuestions[randomIndex];
+  // питання
+  document.getElementById("quizQuestion").innerText = currentQuiz.question;
 
-    // питання
-    document.getElementById("quizQuestion").innerText =
-    currentQuiz.question;
+  // контейнер кнопок
+  const answersDiv = document.getElementById("quizAnswers");
 
-    // контейнер кнопок
-    const answersDiv =
-    document.getElementById("quizAnswers");
+  answersDiv.innerHTML = "";
 
-    answersDiv.innerHTML = "";
-
-    // створення кнопок
-    currentQuiz.answers.forEach((answer, index) => {
-
-        answersDiv.innerHTML += `
+  // створення кнопок
+  currentQuiz.answers.forEach((answer, index) => {
+    answersDiv.innerHTML += `
 
             <button onclick="checkQuiz(${index})">
 
@@ -1446,160 +1181,151 @@ function loadQuiz() {
             </button>
 
         `;
-
-    });
-
+  });
 }
 
 function checkQuiz(answerIndex) {
+  if (answerIndex === currentQuiz.correct) {
+    alert("✅ Правильно!");
 
-    if(answerIndex === currentQuiz.correct) {
-
-        alert("✅ Правильно!");
-
-        document.getElementById("gameStartBtn")
-        .style.display = "block";
-
-    } else {
-
-        alert("❌ Неправильно!");
-
-    }
-
+    document.getElementById("gameStartBtn").style.display = "block";
+  } else {
+    alert("❌ Неправильно!");
+  }
 }
 
 function wrongQuiz() {
-
-    alert("❌ Неправильно!");
+  alert("❌ Неправильно!");
 }
 loadQuiz();
 
 function restartGame() {
+  // очищаємо перешкоди
+  obstacles = [];
 
-    // очищаємо перешкоди
-    obstacles = [];
+  // скидаємо очки
+  score = 0;
 
-    // скидаємо очки
-    score = 0;
+  // повертаємо гравця
+  player.y = 330;
 
-    // повертаємо гравця
-    player.y = 330;
+  player.velocityY = 0;
 
-    player.velocityY = 0;
+  player.jumping = false;
 
-    player.jumping = false;
+  // запускаємо гру
+  gameStarted = true;
 
-    // запускаємо гру
-    gameStarted = true;
+  // ховаємо кнопку
+  document.getElementById("restartBtn").style.display = "none";
 
-    // ховаємо кнопку
-    document.getElementById("restartBtn")
-    .style.display = "none";
-
-    // запускаємо тільки ОДИН loop
-    if (!gameLoopId) {
-        gameLoopId = requestAnimationFrame(gameLoop);
-    }
+  // запускаємо тільки ОДИН loop
+  if (!gameLoopId) {
+    gameLoopId = requestAnimationFrame(gameLoop);
+  }
 }
 
 let coins = [];
 
 function createCoin() {
-    coins.push({
-        x: canvas.width,
-        y: Math.random() * 180 + 120
-    });
+  coins.push({
+    x: canvas.width,
+    y: Math.random() * 100 + 220,
+  });
+  if(Math.random() > 0.6){
+
+        coins.push({
+            x: canvas.width + 60,
+            y: Math.random() * 100 + 220
+        });
+
+    }
 }
 
-setInterval(createCoin, 2000);
+
+function coinSpawner() {
+
+    if(gameStarted){
+
+        createCoin();
+    }
+
+    let randomTime =
+        Math.random() * 3000 + 2000;
+
+    setTimeout(
+        coinSpawner,
+        randomTime
+    );
+}
+
+coinSpawner();
 function drawCoins() {
+  for (let coin of coins) {
+    ctx.shadowColor = "gold";
+    ctx.shadowBlur = 20;
 
-    for(let coin of coins){
+    ctx.beginPath();
 
-        ctx.shadowColor = "gold";
-        ctx.shadowBlur = 20;
+    ctx.fillStyle = "gold";
 
-        ctx.beginPath();
+    ctx.arc(coin.x, coin.y, 16, 0, Math.PI * 2);
 
-        ctx.fillStyle = "gold";
-
-        ctx.arc(
-            coin.x,
-            coin.y,
-            12,
-            0,
-            Math.PI * 2
-        );
-
-        ctx.fill();
-    }
+    ctx.fill();
+  }
 }
-function updateCoins(){
+function updateCoins() {
+  for (let i = 0; i < coins.length; i++) {
+    coins[i].x -= 6;
 
-    for(let i=0;i<coins.length;i++){
+    let dx = player.x + 25 - coins[i].x;
+    let dy = player.y + 25 - coins[i].y;
 
-        coins[i].x -= 9;
+    if (Math.sqrt(dx * dx + dy * dy) < 45) {
+      score += 50;
 
-        let dx = player.x + 25 - coins[i].x;
-        let dy = player.y + 25 - coins[i].y;
+      coins.splice(i, 1);
 
-        if(Math.sqrt(dx*dx + dy*dy) < 30){
-
-            score += 50;
-
-            coins.splice(i,1);
-
-            i--;
-        }
+      i--;
     }
-coins = coins.filter(
-    coin => coin.x > -20
-);
-
+  }
+  coins = coins.filter((coin) => coin.x > -20);
 }
 function createObstacle() {
+  let randomHeight = Math.random() * 25 + 20;
 
-    let randomHeight =
-        Math.random() * 25 + 20;
+  obstacles.push({
+    x: canvas.width,
 
-    obstacles.push({
+    y: 390 - randomHeight,
 
-        x: canvas.width,
+    width: 30,
 
-        y: 390 - randomHeight,
-
-        width: 30,
-
-        height: randomHeight
-    });
+    height: randomHeight,
+  });
 }
 let clouds = [];
 
-for(let i=0;i<5;i++){
-
-    clouds.push({
-        x: Math.random()*canvas.width,
-        y: Math.random()*150
-    });
+for (let i = 0; i < 5; i++) {
+  clouds.push({
+    x: Math.random() * canvas.width,
+    y: Math.random() * 150,
+  });
 }
-function drawClouds(){
+function drawClouds() {
+  ctx.fillStyle = "rgba(255,255,255,0.5)";
 
-    ctx.fillStyle =
-        "rgba(255,255,255,0.5)";
+  for (let cloud of clouds) {
+    cloud.x -= 0.5;
 
-    for(let cloud of clouds){
-
-        cloud.x -= 0.5;
-
-        if(cloud.x < -100){
-
-            cloud.x = canvas.width;
-        }
-
-        ctx.beginPath();
-ctx.arc(cloud.x, cloud.y, 25, 0, Math.PI * 2);
-ctx.arc(cloud.x + 20, cloud.y - 10, 30, 0, Math.PI * 2);
-ctx.arc(cloud.x + 45, cloud.y, 25, 0, Math.PI * 2);
-ctx.fill();
+    if (cloud.x < -100) {
+      cloud.x = canvas.width;
     }
+
+    ctx.beginPath();
+    ctx.arc(cloud.x, cloud.y, 25, 0, Math.PI * 2);
+    ctx.arc(cloud.x + 20, cloud.y - 10, 30, 0, Math.PI * 2);
+    ctx.arc(cloud.x + 45, cloud.y, 25, 0, Math.PI * 2);
+    ctx.fill();
+  }
 }
