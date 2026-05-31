@@ -991,18 +991,34 @@ function drawPlayer() {
 // JUMP
 // ==========================
 
-document.addEventListener("keydown", function (event) {
-  // якщо натиснули SPACE
-  if (event.code === "Space") {
-    // якщо не стрибає
-    if (!player.jumping) {
-      // стрибок
-      player.velocityY = -19;
+function jump() {
 
-      // тепер стрибає
-      player.jumping = true;
+    if (!player.jumping) {
+
+        player.velocityY = -18;
+
+        player.jumping = true;
     }
-  }
+}
+
+document.addEventListener("keydown", function(event) {
+
+    if (event.code === "Space") {
+
+        jump();
+    }
+});
+
+canvas.addEventListener("touchstart", function() {
+
+    jump();
+
+});
+
+canvas.addEventListener("click", function() {
+
+    jump();
+
 });
 
 //ПЕРЕШКОДИ
@@ -1050,7 +1066,7 @@ function updateObstacles() {
   score += 0.1;
 }
 
-let obstacleSpawn = 2800;
+let obstacleSpawn = 3200;
 
 function obstacleSpawner() {
   if (gameStarted) {
@@ -1292,6 +1308,14 @@ function updateCoins() {
   coins = coins.filter((coin) => coin.x > -20);
 }
 function createObstacle() {
+
+if (
+    obstacles.length > 0 &&
+    canvas.width - obstacles[obstacles.length - 1].x < 300
+){
+    return;
+}
+
   let randomHeight = Math.random() * 25 + 20;
 
   obstacles.push({
