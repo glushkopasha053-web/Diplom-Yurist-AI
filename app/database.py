@@ -4,7 +4,7 @@
 
 import sqlite3
 import os
-
+import re
 
 # ============================================
 # ПІДКЛЮЧЕННЯ
@@ -69,26 +69,34 @@ def save_knowledge(title, keywords, content, source):
 def search_knowledge(user_message):
 
     conn = connect_db()
-
     cursor = conn.cursor()
 
-    cursor.execute("""
+    words = re.findall(r"\w+", user_message.lower())
 
-    SELECT content
-    FROM knowledge
+    for word in words:
 
-    WHERE LOWER(keywords) LIKE LOWER(?)
+        cursor.execute("""
 
-    LIMIT 1
+        SELECT content
+        FROM knowledge
 
-    """, (
+        WHERE LOWER(keywords) LIKE ?
 
-        "%" + user_message.strip() + "%",
+        LIMIT 1
 
-    ))
+        """, (
 
-    result = cursor.fetchone()
+            "%" + word + "%",
+
+        ))
+
+        result = cursor.fetchone()
+
+        if result:
+
+            conn.close()
+            return result
 
     conn.close()
 
-    return result
+    return None

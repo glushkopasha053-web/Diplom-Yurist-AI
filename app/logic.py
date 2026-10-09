@@ -5,6 +5,7 @@
 from app.database import search_knowledge
 
 from app.gpt_memory import ask_gpt
+from app.config import USE_GPT
 
 
 # ============================================
@@ -45,6 +46,14 @@ def process_user_message(message):
     # ============================================
     # ЯКЩО НЕ ЗНАЙШЛО → GPT
     # ============================================
+
+    if not USE_GPT:
+
+        return """
+
+❌ GPT вимкнено адміністратором.
+
+"""
 
     print("GPT ЗАПУЩЕНО")
 
