@@ -8,6 +8,8 @@ from flask import request
 from flask import jsonify
 from flask import send_file
 from app.document_generator import create_pdf, create_docx
+from app.document_checker import extract_document_text
+from app.gpt_memory import analyze_document, generate_legal_document
 
 from app.logic import process_user_message
 # Weather
@@ -104,84 +106,24 @@ def news_api():
 # PDF
 # =========================================
 
-@app.route("/download-pdf/<doc_type>")
-def download_pdf(doc_type):
+@app.route("/download-pdf", methods=["POST"])
+def download_pdf():
 
-    text = ""
+    data = request.get_json() or {}
+    text = (data.get("text") or "").strip()
+    filename = (data.get("filename") or "document").strip()
 
-    # ПОЗОВ
-    if doc_type == "lawsuit":
+    if not text:
+        return jsonify({
+            "success": False,
+            "error": "Порожній текст документа."
+        }), 400
 
-        text = """
-ПОЗОВНА ЗАЯВА
+    filename = "".join(
+        c for c in filename if c.isalnum() or c in "-_"
+    ) or "document"
 
-До суду:
-
-Позивач:
-
-Відповідач:
-
-Суть позову:
-
-Дата:
-Підпис:
-"""
-
-    # СКАРГА
-    elif doc_type == "complaint":
-
-        text = """
-СКАРГА
-
-Я, __________________
-
-повідомляю про:
-
-_____________________
-
-Прошу:
-
-_____________________
-
-Дата:
-Підпис:
-"""
-
-    # КЛОПОТАННЯ
-    elif doc_type == "motion":
-
-        text = """
-КЛОПОТАННЯ
-
-Прошу суд:
-
-_____________________
-
-Обґрунтування:
-
-_____________________
-
-Дата:
-Підпис:
-"""
-
-    # ПОЛІЦІЯ
-    elif doc_type == "police":
-
-        text = """
-ЗАЯВА ДО ПОЛІЦІЇ
-
-Прошу внести відомості до ЄРДР.
-
-Обставини:
-
-_____________________
-
-Дата:
-Підпис:
-"""
-
-    filepath = create_pdf(text, f"{doc_type}.pdf")
+    filepath = create_pdf(text, f"{filename}.pdf")
 
     return send_file(filepath, as_attachment=True)
 
@@ -190,55 +132,136 @@ _____________________
 # DOCX
 # =========================================
 
-@app.route("/download-docx/<doc_type>")
-def download_docx(doc_type):
+@app.route("/download-docx", methods=["POST"])
+def download_docx():
 
-    text = ""
+    data = request.get_json() or {}
+    text = (data.get("text") or "").strip()
+    filename = (data.get("filename") or "document").strip()
 
-    if doc_type == "lawsuit":
+    if not text:
+        return jsonify({
+            "success": False,
+            "error": "Порожній текст документа."
+        }), 400
 
-        text = """
-ПОЗОВНА ЗАЯВА
+    filename = "".join(
+        c for c in filename if c.isalnum() or c in "-_"
+    ) or "document"
 
-До суду:
-
-Позивач:
-
-Відповідач:
-
-Суть позову:
-"""
-
-    elif doc_type == "complaint":
-
-        text = """
-СКАРГА
-
-Я, __________________
-
-повідомляю про:
-"""
-
-    elif doc_type == "motion":
-
-        text = """
-КЛОПОТАННЯ
-
-Прошу суд:
-"""
-
-    elif doc_type == "police":
-
-        text = """
-ЗАЯВА ДО ПОЛІЦІЇ
-
-Прошу внести відомості до ЄРДР.
-"""
-
-    filepath = create_docx(text, f"{doc_type}.docx")
+    filepath = create_docx(text, f"{filename}.docx")
 
     return send_file(filepath, as_attachment=True)
 
+
+# ============================================
+# API: ПЕРЕВІРКА ЮРИДИЧНОГО ДОКУМЕНТА
+# ============================================
+
+@app.route("/api/check-document", methods=["POST"])
+def check_document():
+
+    if "file" not in request.files:
+        return jsonify({
+            "success": False,
+            "error": "Виберіть PDF або DOCX для перевірки."
+        }), 400
+
+    uploaded_file = request.files["file"]
+
+    try:
+        document_text = extract_document_text(uploaded_file)
+
+        return jsonify({
+            "success": True,
+            "filename": uploaded_file.filename,
+            "text": document_text,
+            "message": "Документ прочитано. Можна переходити до юридичного аналізу."
+        })
+
+    except ValueError as error:
+        return jsonify({
+            "success": False,
+            "error": str(error)
+        }), 400
+
+    except Exception:
+        app.logger.exception("Помилка обробки юридичного документа")
+
+        return jsonify({
+            "success": False,
+            "error": "Не вдалося обробити документ. Спробуйте інший файл."
+        }), 500
+
+
+# ============================================
+# API: ЮРИДИЧНИЙ АНАЛІЗ ДОКУМЕНТА
+# ============================================
+
+@app.route("/api/analyze-document", methods=["POST"])
+def analyze_document_route():
+
+    data = request.get_json()
+    document_text = (data or {}).get("text", "").strip()
+
+    if not document_text:
+        return jsonify({
+            "success": False,
+            "error": "Текст документа порожній."
+        }), 400
+
+    try:
+        analysis = analyze_document(document_text)
+
+        return jsonify({
+            "success": True,
+            "analysis": analysis
+        })
+
+    except Exception as error:
+        app.logger.exception("Помилка юридичного аналізу")
+        return jsonify({
+            "success": False,
+            "error": f"Помилка аналізу: {error}"
+        }), 500
+
+
+# ============================================
+# API: ГЕНЕРАЦІЯ ЮРИДИЧНОГО ДОКУМЕНТА (AI сам обирає тип)
+# ============================================
+
+@app.route("/api/generate-document", methods=["POST"])
+def generate_document_route():
+
+    data = request.get_json() or {}
+    situation = (data.get("situation") or "").strip()
+
+    if not situation:
+        return jsonify({
+            "success": False,
+            "error": "Опишіть ситуацію."
+        }), 400
+
+    if len(situation) < 20:
+        return jsonify({
+            "success": False,
+            "error": "Опис занадто короткий. Додайте деталі."
+        }), 400
+
+    try:
+        document_text = generate_legal_document(situation)
+
+        return jsonify({
+            "success": True,
+            "document": document_text
+        })
+
+    except Exception as error:
+        app.logger.exception("Помилка генерації документа")
+        return jsonify({
+            "success": False,
+            "error": f"Помилка генерації: {error}"
+        }), 500
 
 # ============================================
 # START

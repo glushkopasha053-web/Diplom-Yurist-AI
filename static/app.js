@@ -351,144 +351,6 @@ async function sendMessage(customText = null) {
 }
 
 // =========================
-// ГЕНЕРАЦІЯ ДОКУМЕНТІВ
-// =========================
-
-function generateDocument(type) {
-  const result = document.getElementById("document-result");
-
-  result.classList.remove("hidden");
-
-  // =====================
-  // ПОЗОВ
-  // =====================
-
-  if (type === "lawsuit") {
-    result.innerText = `
-
-ПОЗОВНА ЗАЯВА
-
-До суду:
-
-Позивач:
-________________
-
-Відповідач:
-________________
-
-СУТЬ ПОЗОВУ:
-
-Прошу суд:
-
-1. __________________
-
-2. __________________
-
-Дата:
-Підпис:
-
-`;
-  }
-
-  // =====================
-  // КЛОПОТАННЯ
-  // =====================
-
-  if (type === "motion") {
-    result.innerText = `
-
-КЛОПОТАННЯ
-
-До суду:
-
-У справі № ______
-
-Прошу:
-
-_____________________
-
-Обґрунтування:
-
-_____________________
-
-Дата:
-Підпис:
-
-`;
-  }
-
-  // =====================
-  // СКАРГА
-  // =====================
-
-  if (type === "complaint") {
-    result.innerText = `
-
-СКАРГА
-
-Я, __________________,
-
-повідомляю про:
-
-_____________________
-
-Прошу:
-
-_____________________
-
-Дата:
-Підпис:
-
-`;
-  }
-
-  // =====================
-  // ПОЛІЦІЯ
-  // =====================
-
-  if (type === "police") {
-    result.innerText = `
-
-ЗАЯВА ДО ПОЛІЦІЇ
-
-Прошу внести відомості до ЄРДР.
-
-Обставини:
-
-_____________________
-
-Дата:
-Підпис:
-
-`;
-  }
-
-  // =========================
-  // КНОПКИ СКАЧУВАННЯ
-  // =========================
-
-  result.innerHTML += `
-
-    <div class="download-buttons">
-
-        <a href="/download-pdf/${type}">
-            <button class="download-btn">
-                ⬇ Скачать PDF
-            </button>
-        </a>
-
-        <a href="/download-docx/${type}">
-            <button class="download-btn">
-                ⬇ Скачать DOCX
-            </button>
-        </a>
-
-    </div>
-
-    `;
-}
-
-// =========================
 // CLOCK
 // =========================
 
@@ -1352,4 +1214,292 @@ function drawClouds() {
     ctx.arc(cloud.x + 45, cloud.y, 25, 0, Math.PI * 2);
     ctx.fill();
   }
+}
+
+
+/* =========================================
+   ПЕРЕВІРКА ЮРИДИЧНОГО ДОКУМЕНТА
+   Без перезавантаження сторінки
+========================================= */
+
+document.addEventListener("DOMContentLoaded", function () {
+    const form = document.getElementById("document-checker-form");
+    const fileInput = document.getElementById("legal-document");
+    const button = document.getElementById("check-document-btn");
+    const status = document.getElementById("checker-status");
+    const result = document.getElementById("checker-result");
+    const filename = document.getElementById("checker-filename");
+    const textArea = document.getElementById("checker-text");
+
+    // Переконуємося, що всі потрібні HTML-елементи існують.
+    if (!form || !fileInput || !button || !status ||
+        !result || !filename || !textArea) {
+        console.error("Не знайдено елементи форми перевірки документа.");
+        return;
+    }
+
+    form.addEventListener("submit", async function (event) {
+        // Головне: не дозволяємо формі перезавантажувати сторінку.
+        event.preventDefault();
+
+        const file = fileInput.files[0];
+
+        if (!file) {
+            status.textContent = "Спочатку виберіть PDF або DOCX.";
+            return;
+        }
+
+        if (file.size > 10 * 1024 * 1024) {
+            status.textContent = "Файл завеликий. Максимальний розмір — 10 МБ.";
+            return;
+        }
+
+        const extension = file.name.toLowerCase().split(".").pop();
+
+        if (!["pdf", "docx"].includes(extension)) {
+            status.textContent = "Дозволені лише файли PDF і DOCX.";
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append("file", file);
+
+        button.disabled = true;
+        status.textContent = "⏳ Читаємо документ...";
+        result.classList.add("hidden");
+        textArea.value = "";
+        filename.textContent = "";
+
+        try {
+            const response = await fetch("/api/check-document", {
+                method: "POST",
+                body: formData
+            });
+
+            const data = await response.json();
+
+            if (!response.ok || !data.success) {
+                throw new Error(
+                    data.error || "Не вдалося прочитати документ."
+                );
+            }
+
+            filename.textContent = "Файл: " + data.filename;
+            textArea.value = data.text;
+            status.textContent = data.message || "Документ успішно прочитано.";
+
+            result.classList.remove("hidden");
+        } catch (error) {
+            console.error("Помилка перевірки документа:", error);
+            status.textContent = error.message ||
+                "Помилка зв'язку із сервером. Спробуйте ще раз.";
+        } finally {
+            button.disabled = false;
+        }
+    });
+});
+
+
+/* =========================================
+   ЮРИДИЧНИЙ АНАЛІЗ ДОКУМЕНТА
+========================================= */
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const analyzeBtn = document.getElementById("analyze-document-btn");
+    const analysisStatus = document.getElementById("analysis-status");
+    const analysisResult = document.getElementById("analysis-result");
+    const textArea = document.getElementById("checker-text");
+
+    if (!analyzeBtn || !analysisStatus || !analysisResult || !textArea) {
+        return;
+    }
+
+    analyzeBtn.addEventListener("click", async function () {
+
+        const text = textArea.value.trim();
+
+        if (!text) {
+            analysisStatus.textContent =
+                "Спочатку завантажте та прочитайте документ.";
+            return;
+        }
+
+        analyzeBtn.disabled = true;
+        analysisStatus.textContent = "⏳ AI аналізує документ...";
+        analysisResult.classList.add("hidden");
+        analysisResult.innerHTML = "";
+
+        try {
+            const response = await fetch("/api/analyze-document", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ text: text })
+            });
+
+            const data = await response.json();
+
+            if (!response.ok || !data.success) {
+                throw new Error(data.error || "Помилка аналізу.");
+            }
+
+            analysisResult.innerText = data.analysis;
+            analysisResult.classList.remove("hidden");
+            analysisStatus.textContent = "✅ Аналіз завершено.";
+
+        } catch (error) {
+            console.error("Помилка аналізу:", error);
+            analysisStatus.textContent =
+                error.message || "Помилка зв'язку із сервером.";
+        } finally {
+            analyzeBtn.disabled = false;
+        }
+    });
+});
+
+/* =========================================
+   ДОКУМЕНТИ: AI САМ ОБИРАЄ ТИП ДОКУМЕНТА
+========================================= */
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const btn = document.getElementById("generate-doc-btn");
+    const situation = document.getElementById("doc-situation");
+    const status = document.getElementById("doc-status");
+    const result = document.getElementById("document-result");
+
+    if (!btn || !situation || !status || !result) {
+        return;
+    }
+
+    btn.addEventListener("click", async function () {
+
+        const text = situation.value.trim();
+
+        if (text.length < 20) {
+            status.textContent =
+                "Опишіть ситуацію детальніше (мінімум 20 символів).";
+            return;
+        }
+
+        btn.disabled = true;
+        status.textContent = "⏳ AI аналізує ситуацію...";
+        result.classList.add("hidden");
+        result.innerHTML = "";
+
+        try {
+            const response = await fetch("/api/generate-document", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ situation: text })
+            });
+
+            const data = await response.json();
+
+            if (!response.ok || !data.success) {
+                throw new Error(data.error || "Помилка генерації.");
+            }
+
+            // Показуємо результат
+            result.innerText = data.document;
+            result.classList.remove("hidden");
+
+            result.dataset.docText = data.document;
+
+            // Кнопки скачування
+            result.innerHTML += `
+
+                <div class="download-buttons">
+
+                    <button class="download-btn"
+                            onclick="downloadDoc('pdf')">
+                        ⬇ Скачати PDF
+                    </button>
+
+                    <button class="download-btn"
+                            onclick="downloadDoc('docx')">
+                        ⬇ Скачати DOCX
+                    </button>
+
+                </div>
+
+            `;
+
+            status.textContent = "✅ Документ готовий.";
+
+            // Прокрутка до результату
+            result.scrollIntoView({
+                behavior: "smooth",
+                block: "start"
+            });
+
+        } catch (error) {
+            console.error("Помилка:", error);
+            status.textContent = "❌ " + error.message;
+        } finally {
+            btn.disabled = false;
+        }
+    });
+});
+
+
+/* =========================================
+   СКАЧУВАННЯ
+========================================= */
+
+async function downloadDoc(format) {
+
+    const result = document.getElementById("document-result");
+
+    const text = result.dataset.docText || "";
+
+    if (!text) {
+        alert("Спочатку згенеруйте документ.");
+        return;
+    }
+
+    const url = (format === "pdf")
+        ? "/download-pdf"
+        : "/download-docx";
+
+    // Ім'я файлу — перша лінійка документа (назва)
+    let filename = "document";
+    const firstLine = text.split("\n")[0].trim();
+    if (firstLine) {
+        filename = firstLine
+            .toLowerCase()
+            .replace(/[^a-zа-яїієґ0-9]+/gi, "_")
+            .substring(0, 40);
+    }
+
+    try {
+        const response = await fetch(url, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                text: text,
+                filename: filename
+            })
+        });
+
+        if (!response.ok) {
+            throw new Error("Не вдалося створити файл.");
+        }
+
+        const blob = await response.blob();
+
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(blob);
+        link.download = filename + "." + format;
+
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+
+        URL.revokeObjectURL(link.href);
+
+    } catch (error) {
+        console.error("Помилка скачування:", error);
+        alert("Помилка: " + error.message);
+    }
 }

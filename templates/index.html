@@ -32,6 +32,13 @@ id="menu-documents">
 </button>
 
 <button class="menu-btn"
+        onclick="showSection('checker-section')"
+        id="menu-checker">
+    🔍 Перевірка документів
+</button>
+
+
+<button class="menu-btn"
 onclick="showSection('game-section')"
 id="menu-game">
 
@@ -170,205 +177,170 @@ id="menu-settings">
 </div>
 
 
-    <!-- DOCUMENTS -->
+    <div id="documents-section" class="content-section hidden">
 
-<div id="documents-section"
-class="content-section hidden">
+    <h1 id="documents-title">📄 Документи</h1>
 
-    <h1 id="documents-title">
-        📄 Документи
-    </h1>
+    <p class="subtitle">
+        Опишіть вашу ситуацію — AI сам визначить,
+        який документ потрібен, і складе його.
+    </p>
 
-    <div class="documents-grid">
+    <!-- ВЕЛИКА КАРТКА -->
+    <div class="info-card">
 
-        <!-- ПОЗОВ -->
+        <h2>⚖ AI-юрист складе документ</h2>
 
-        <div class="document-card">
+        <p class="subtitle">
+            Просто опишіть, що сталося — система підбере
+            правильний тип документа (позов, скарга,
+            клопотання, заява) і складе його за нормами
+            законодавства України.
+        </p>
 
-            <h3>📄 Позовна заява</h3>
+        <textarea
+            id="doc-situation"
+            rows="8"
+            placeholder="Наприклад: Сусід затопив квартиру 15.03.2025, збитки 25 000 грн, є акт від ЖЕКу та фото. Відшкодувати відмовляється."
+        ></textarea>
 
-            <p>
-                Створення шаблону позовної заяви.
-            </p>
+        <div id="doc-status" role="status"></div>
 
-            <button onclick="generateDocument('lawsuit')">
-
-                Створити
-
-            </button>
-
-        </div>
-
-        <!-- КЛОПОТАННЯ -->
-
-        <div class="document-card">
-
-            <h3>⚖ Клопотання</h3>
-
-            <p>
-                Генерація судового клопотання.
-            </p>
-
-            <button onclick="generateDocument('motion')">
-
-                Створити
-
-            </button>
-
-        </div>
-
-        <!-- СКАРГА -->
-
-        <div class="document-card">
-
-            <h3>📨 Скарга</h3>
-
-            <p>
-                Формування юридичної скарги.
-            </p>
-
-            <button onclick="generateDocument('complaint')">
-
-                Створити
-
-            </button>
-
-        </div>
-
-        <!-- ПОЛІЦІЯ -->
-
-        <div class="document-card">
-
-            <h3>🚔 Заява до поліції</h3>
-
-            <p>
-                Шаблон заяви до поліції.
-            </p>
-
-            <button onclick="generateDocument('police')">
-
-                Створити
-
-            </button>
-
-        </div>
+        <button
+            type="button"
+            id="generate-doc-btn"
+            style="margin-top:15px;">
+            ⚖ Створити документ
+        </button>
 
     </div>
 
     <!-- РЕЗУЛЬТАТ -->
-
     <div id="document-result"
-    class="document-result hidden">
+         class="document-result hidden">
+    </div>
+
+    <!-- ========================= -->
+    <!-- EMERGENCY SERVICES -->
+    <!-- ========================= -->
+
+    <div class="services-block">
+
+        <h2>🚨 Термінові служби</h2>
+
+        <div class="services-grid">
+
+            <div class="service-card">
+                <h3>🚓 Поліція 102</h3>
+                <p>Національна поліція України</p>
+                <button onclick="openPolice()">Відкрити</button>
+            </div>
+
+            <div class="service-card">
+                <h3>⚖ Безоплатна правова допомога</h3>
+                <p>Юридична допомога громадянам</p>
+                <button onclick="openBPD()">Відкрити</button>
+            </div>
+
+            <div class="service-card">
+                <h3>🛡 Омбудсмен</h3>
+                <p>Захист прав людини</p>
+                <button onclick="openOmbudsman()">Відкрити</button>
+            </div>
+
+            <div class="service-card">
+                <h3>🏛 Судова влада</h3>
+                <p>Офіційний портал судів</p>
+                <button onclick="openCourt()">Відкрити</button>
+            </div>
+
+            <div class="service-card">
+                <h3>📄 Електронний суд</h3>
+                <p>Подання документів онлайн</p>
+                <button onclick="openECourt()">Відкрити</button>
+            </div>
+
+        </div>
 
     </div>
 
-<!-- ========================= -->
-<!-- EMERGENCY SERVICES -->
-<!-- ========================= -->
+</div>
 
-<div class="services-block">
+<!-- ====================================== -->
+<!-- ПЕРЕВІРКА ЮРИДИЧНИХ ДОКУМЕНТІВ -->
+<!-- ====================================== -->
 
-    <h2>
-        🚨 Термінові служби
-    </h2>
+<div id="checker-section" class="content-section hidden">
 
-    <div class="services-grid">
+    <h1>🔍 Перевірка юридичних документів</h1>
 
-        <!-- ПОЛІЦІЯ -->
-
-        <div class="service-card">
-
-            <h3>🚓 Поліція 102</h3>
-
-            <p>
-                Національна поліція України
-            </p>
-
-            <button onclick="openPolice()">
-
-                Відкрити
-
-            </button>
-
-        </div>
-
-        <!-- БПД -->
-
-        <div class="service-card">
-
-            <h3>⚖ Безоплатна правова допомога</h3>
-
-            <p>
-                Юридична допомога громадянам
-            </p>
-
-            <button onclick="openBPD()">
-
-                Відкрити
-
-            </button>
-
-        </div>
-
-        <!-- ОМБУДСМЕН -->
-
-        <div class="service-card">
-
-            <h3>🛡 Омбудсмен</h3>
-
-            <p>
-                Захист прав людини
-            </p>
-
-            <button onclick="openOmbudsman()">
-
-                Відкрити
-
-            </button>
-
-        </div>
-
-        <!-- СУДОВА ВЛАДА -->
-
-        <div class="service-card">
-
-            <h3>🏛 Судова влада</h3>
-
-            <p>
-                Офіційний портал судів
-            </p>
-
-            <button onclick="openCourt()">
-
-                Відкрити
-
-            </button>
-
-        </div>
-
-<!-- ЕЛЕКТРОННИЙ СУД -->
-
-<div class="service-card">
-
-    <h3>📄 Електронний суд</h3>
-
-    <p>
-        Подання документів онлайн
+    <p class="subtitle">
+        Завантажте документ, щоб перевірити його текст
+        та підготувати до юридичного аналізу.
     </p>
 
-    <button onclick="openECourt()">
+    <div class="info-card">
 
-        Відкрити
+        <form id="document-checker-form">
 
-    </button>
+            <label for="legal-document">
+                Виберіть документ PDF або DOCX:
+            </label>
+
+            <input
+                type="file"
+                id="legal-document"
+                name="file"
+                accept=".pdf,.docx"
+                required
+            >
+
+            <p class="subtitle">
+                Максимальний розмір файла — 10 МБ.
+            </p>
+
+            <button type="submit" id="check-document-btn">
+                🔎 Перевірити документ
+            </button>
+
+        </form>
+
+        <div id="checker-status" role="status"></div>
+
+        <div id="checker-result" class="hidden">
+
+            <h2>📄 Результат читання документа</h2>
+
+            <p id="checker-filename"></p>
+
+            <textarea
+                id="checker-text"
+                rows="12"
+                readonly
+                placeholder="Тут з'явиться текст документа..."
+            ></textarea>
+
+            <p class="subtitle">
+                На цьому етапі система витягує текст.
+            </p>
+
+            <button
+                type="button"
+                id="analyze-document-btn"
+                style="margin-top:20px;">
+                 ⚖ Юридичний аналіз документа
+            </button>
+
+            <div id="analysis-status" role="status"></div>
+
+            <div id="analysis-result" class="document-result hidden"></div>
+
+        </div>
 
     </div>
 
-    </div>
+</div>
 
-    </div>
-
-    </div>
 
     <!-- ABOUT -->
     <div id="about-section" class="content-section hidden">
