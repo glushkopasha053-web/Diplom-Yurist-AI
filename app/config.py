@@ -9,7 +9,7 @@ USE_GPT = True
 GPT_MODEL = "gpt-4.1-mini"
 
 # максимальна довжина відповіді
-GPT_MAX_TOKENS = 100
+GPT_MAX_TOKENS = 1000
 
 # максимальна довжина ЮРИДИЧНОГО АНАЛІЗУ
 GPT_ANALYSIS_TOKENS = 2000

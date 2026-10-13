@@ -8,6 +8,7 @@ from openai import OpenAI
 from app.database import save_knowledge
 
 import os
+import re 
 from app.config import GPT_MODEL
 from app.config import GPT_MAX_TOKENS
 from app.config import SAVE_GPT_ANSWERS
@@ -25,90 +26,161 @@ client = OpenAI(
 
 )
 
-
-
 # ============================================
-# GPT ВІДПОВІДЬ
+# ІСТОРІЯ ДІАЛОГУ (пам'ять чату)
 # ============================================
 
-def ask_gpt(user_message):
+# Словник: session_id -> список повідомлень
+chat_history = {}
 
-    response = client.chat.completions.create(
+# Максимум повідомлень у пам'яті (щоб не переповнити токени)
+MAX_HISTORY = 10
 
-    model=GPT_MODEL,
 
-    max_tokens=GPT_MAX_TOKENS,
+def get_history(session_id):
+    """Повертає історію діалогу для сесії."""
+    return chat_history.get(session_id, [])
 
-        messages=[
 
-            {
-                "role": "system",
-                "content": """
+def add_to_history(session_id, role, content):
+    """Додає повідомлення в історію."""
+    if session_id not in chat_history:
+        chat_history[session_id] = []
 
+    chat_history[session_id].append({
+        "role": role,
+        "content": content
+    })
+
+    # Обрізаємо до MAX_HISTORY
+    if len(chat_history[session_id]) > MAX_HISTORY:
+        chat_history[session_id] = chat_history[session_id][-MAX_HISTORY:]
+
+
+def clear_history(session_id):
+    """Очищає історію для сесії."""
+    chat_history.pop(session_id, None)
+
+
+def ask_gpt(user_message, session_id="default", context_from_db=None):
+
+    # ============================================
+    # ФОРМУЄМО ПОВІДОМЛЕННЯ
+    # ============================================
+
+    # Системний prompt
+    system_content = """
 Ти юридичний AI-помічник України.
 
 Відповідай коротко,
 професійно,
 юридично грамотно.
 
+Пам'ятай попередні повідомлення користувача
+та підтримуй контекст діалогу.
 """
-            },
 
-            {
-                "role": "user",
-                "content": user_message
-            }
+    messages = [
+        {"role": "system", "content": system_content}
+    ]
 
-        ]
+    # Додаємо контекст з бази (якщо є)
+    if context_from_db:
+        messages.append({
+            "role": "system",
+            "content": (
+                "Додаткова інформація з локальної бази знань "
+                f"(використай її, якщо доречно):\n\n{context_from_db}"
+            )
+        })
 
+    # Додаємо історію діалогу
+    messages.extend(get_history(session_id))
+
+    # Додаємо поточне повідомлення
+    messages.append({
+        "role": "user",
+        "content": user_message
+    })
+
+    # ============================================
+    # ЗАПИТ ДО GPT
+    # ============================================
+
+    response = client.chat.completions.create(
+        model=GPT_MODEL,
+        max_tokens=GPT_MAX_TOKENS,
+        messages=messages
     )
 
     answer = response.choices[0].message.content
 
-    words = user_message.lower().split()
+    if not answer:
+        answer = "Не вдалося отримати відповідь. Спробуйте ще раз."
 
-    stop_words = [
-    "як", "що", "де", "коли", "для",
-    "та", "і", "в", "на", "про",
-    "це", "чи", "у","поясни","можна",
-    "треба"
-]
+    # ============================================
+    # ЗБЕРІГАЄМО В ІСТОРІЮ
+    # ============================================
+
+    add_to_history(session_id, "user", user_message)
+    add_to_history(session_id, "assistant", answer)
+
+    # ============================================
+    # КЛЮЧОВІ СЛОВА (для збереження в базу)
+    # ============================================
+
+    clean_text = re.sub(r"[^\w\s]", " ", user_message.lower())
+    words = clean_text.split()
+
+    stop_words = {
+        "як", "що", "де", "коли", "для", "та", "і",
+        "в", "на", "про", "це", "чи", "у", "з", "по",
+        "до", "від", "за", "або", "але", "не", "ні",
+        "мені", "мене", "мій", "моя", "моє", "я",
+        "ти", "він", "вона", "воно", "ми", "ви", "вони",
+        "хочу", "можна", "треба", "потрібно", "поясни",
+        "розкажи", "допоможи", "будь", "ласка",
+        "подати", "подай", "подаю", "подається",
+        "отримати", "отримаю", "зробити", "зроби",
+    }
+
+    endings = [
+        "ами", "ями", "ові", "еві", "ого", "ому",
+        "ою", "ею", "ий", "ій", "ої",
+        "ах", "ях", "ам", "ям", "ів", "їв",
+        "а", "я", "у", "ю", "и", "і", "е", "о",
+    ]
 
     keywords_list = []
 
     for word in words:
-
-        if word  in stop_words or len(word) <= 3:
+        if word in stop_words or len(word) <= 3:
             continue
 
-        word = word.lower()
-
-        for ending in [
-            "ами",
-            "ями",
-            "ого",
-            "ому",
-            "ою",
-            "ею",
-            "ий",
-            "ій",
-            "а",
-            "я",
-            "у",
-            "ю",
-            "и",
-            "і"
-        ]:
-
-            if word.endswith(ending) and len(word) > 5:
-
+        for ending in endings:
+            if word.endswith(ending) and len(word) - len(ending) >= 4:
                 word = word[:-len(ending)]
                 break
 
         keywords_list.append(word)
 
-    keywords = ",".join(list(dict.fromkeys(keywords_list))[:10])
-        
+    keywords = ",".join(
+        list(dict.fromkeys(keywords_list))[:10]
+    )
+
+    # ============================================
+    # АВТОЗБЕРЕЖЕННЯ У БАЗУ
+    # ============================================
+
+    if SAVE_GPT_ANSWERS:
+        save_knowledge(
+            title=user_message[:50],
+            keywords=keywords,
+            content=answer,
+            source="gpt"
+        )
+
+    return answer
 # ============================================
 # ЮРИДИЧНИЙ АНАЛІЗ ДОКУМЕНТА
 # ============================================
@@ -146,23 +218,7 @@ def analyze_document(document_text):
 
     return response.choices[0].message.content
         
-    # ============================================
-    # АВТОЗБЕРЕЖЕННЯ У БАЗУ
-    # ============================================
-    if SAVE_GPT_ANSWERS:
-
-        save_knowledge(
-
-            title=user_message[:50],
-
-            keywords=keywords,
-
-            content=answer,
-
-            source="gpt"
-)
-        
-    return answer
+    
 
 # ============================================
 # ГЕНЕРАЦІЯ ЮРИДИЧНОГО ДОКУМЕНТА (AI сам обирає тип)

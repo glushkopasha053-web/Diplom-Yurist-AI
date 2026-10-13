@@ -43,20 +43,28 @@ def home():
 def chat():
 
     data = request.get_json()
-
     user_message = data.get("message", "")
+    session_id = data.get("session_id", "default")
 
-    answer = process_user_message(
+    answer = process_user_message(user_message, session_id)
 
-        user_message
+    return jsonify({"answer": answer})
 
-    )
+# ============================================
+# API: ОЧИСТИТИ ІСТОРІЮ ЧАТУ
+# ============================================
 
-    return jsonify({
+@app.route("/api/clear-chat", methods=["POST"])
+def clear_chat():
 
-        "answer": answer
+    from app.gpt_memory import clear_history
 
-    })
+    data = request.get_json() or {}
+    session_id = data.get("session_id", "default")
+
+    clear_history(session_id)
+
+    return jsonify({"success": True})
 
 # ============================================
 # API WEATHER
@@ -242,7 +250,7 @@ def generate_document_route():
             "error": "Опишіть ситуацію."
         }), 400
 
-    if len(situation) < 20:
+    if len(situation) < 10:
         return jsonify({
             "success": False,
             "error": "Опис занадто короткий. Додайте деталі."

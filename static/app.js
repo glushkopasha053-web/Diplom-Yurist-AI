@@ -101,6 +101,20 @@ const translations = {
   },
 };
 
+// Унікальний ідентифікатор сесії чату
+// Зберігається у localStorage — щоб історія не губилась при F5
+function getSessionId() {
+    let sessionId = localStorage.getItem("chat_session_id");
+
+    if (!sessionId) {
+        sessionId = "sess_" + Date.now() + "_" +
+                    Math.random().toString(36).slice(2, 9);
+        localStorage.setItem("chat_session_id", sessionId);
+    }
+
+    return sessionId;
+}
+
 function changeLanguage() {
   const lang = document.getElementById("language-select").value;
 
@@ -234,6 +248,9 @@ function scrollToChat() {
 
     mainContent.classList.remove("hidden");
 
+// 🎯 ВИМИКАЄМО анімацію фону (бо заставка зникла)
+    document.body.classList.add("bg-paused");
+
     window.scrollTo({
       top: 0,
       behavior: "smooth",
@@ -336,7 +353,9 @@ async function sendMessage(customText = null) {
 
       body: JSON.stringify({
         message: message,
+        session_id: getSessionId()
       }),
+
     });
 
     const data = await response.json();
@@ -1376,9 +1395,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
         const text = situation.value.trim();
 
-        if (text.length < 20) {
+        if (text.length < 10) {
             status.textContent =
-                "Опишіть ситуацію детальніше (мінімум 20 символів).";
+                "Опишіть ситуацію детальніше (мінімум 10 символів).";
             return;
         }
 
@@ -1498,8 +1517,176 @@ async function downloadDoc(format) {
 
         URL.revokeObjectURL(link.href);
 
+        // Очищуємо URL — прибираємо ?file=...
+history.replaceState(null, "", "/");
+
     } catch (error) {
         console.error("Помилка скачування:", error);
         alert("Помилка: " + error.message);
     }
 }
+
+async function clearChat() {
+
+    if (!confirm("Очистити історію чату?")) return;
+
+    try {
+        await fetch("/api/clear-chat", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ session_id: getSessionId() })
+        });
+
+        // Очищаємо UI
+        const chatBox = document.getElementById("chat-box");
+        chatBox.innerHTML = `
+            <div class="bot-message">
+                Вітаю. Я юридичний AI-помічник.
+                Поставте ваше питання.
+            </div>
+        `;
+
+    } catch (error) {
+        console.error("Помилка очищення:", error);
+        alert("Не вдалося очистити чат.");
+    }
+}
+
+/* =========================================
+   TYPEWRITER — ефект друку тексту на заставці
+========================================= */
+function typeWriter(element, text, speed = 40, onComplete = null) {
+
+    if (!element) return;
+
+    // Очищаємо текст
+    element.textContent = "";
+
+    let i = 0;
+
+    function type() {
+        if (i < text.length) {
+            element.textContent += text.charAt(i);
+            i++;
+            setTimeout(type, speed);
+        } else {
+            // Коли дописано — викликаємо колбек (якщо є)
+            if (typeof onComplete === "function") {
+                onComplete();
+            }
+        }
+    }
+
+    type();
+}
+
+
+window.addEventListener("load", function () {
+
+    const title = document.getElementById("hero-title");
+    const subtitle = document.getElementById("hero-subtitle");
+
+    if (!title || !subtitle) return;
+
+    // Беремо текст з HTML — не дублюємо
+    const titleText = title.textContent.trim();
+    const subtitleText = subtitle.textContent.trim();
+
+    // Запускаємо typewriter
+    setTimeout(() => {
+        typeWriter(title, titleText, 80, () => {
+            setTimeout(() => {
+                typeWriter(subtitle, subtitleText, 60);
+            }, 300);
+        });
+    }, 500);
+});
+
+/* =========================================
+   ЦИТАТА ДНЯ — випадкова при завантаженні
+========================================= */
+
+const dailyQuotes = [
+
+    {
+        text: "Закон один для всіх.",
+        author: "Марк Туллій Цицерон"
+    },
+
+    {
+        text: "Де немає закону, там немає і свободи.",
+        author: "Джон Локк"
+    },
+
+    {
+        text: "Справедливість — основа всіх чеснот.",
+        author: "Цицерон"
+    },
+
+    {
+        text: "Право — це мистецтво добра і справедливості.",
+        author: "Цельс"
+    },
+
+    {
+        text: "Закон — це формальний вираз волі народу.",
+        author: "Жан-Жак Руссо"
+    },
+
+    {
+        text: "Ніхто не може бути суддею у власній справі.",
+        author: "Принцип права"
+    },
+
+    {
+        text: "Немає права без обов'язку, немає обов'язку без права.",
+        author: "Вільям Ґледстон"
+    },
+
+    {
+        text: "Закон повинен бути коротким, щоб його легко запам'ятали.",
+        author: "Сенека"
+    },
+
+    {
+        text: "Немає нічого важливішого за справедливість.",
+        author: "Платон"
+    },
+
+    {
+        text: "Краще запобігти злочину, ніж карати за нього.",
+        author: "Шарль Монтеск'є"
+    },
+
+    {
+        text: "Право — це свобода, обмежена законом.",
+        author: "Еммануїл Кант"
+    },
+
+    {
+        text: "Там, де закінчується право, починається насильство.",
+        author: "Рудольф фон Єрінг"
+    }
+
+];
+
+
+function showDailyQuote() {
+
+    const textEl = document.getElementById("quote-text");
+    const authorEl = document.getElementById("quote-author");
+
+    if (!textEl || !authorEl) return;
+
+    // Випадкова цитата
+    const randomIndex = Math.floor(Math.random() * dailyQuotes.length);
+    const quote = dailyQuotes[randomIndex];
+
+    // Вставляємо текст
+    textEl.textContent = quote.text;
+    authorEl.textContent = "" + quote.author;
+}
+
+
+// Запускаємо після завантаження
+window.addEventListener("DOMContentLoaded", showDailyQuote);

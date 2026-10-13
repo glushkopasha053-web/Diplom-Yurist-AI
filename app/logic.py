@@ -12,69 +12,85 @@ from app.config import USE_GPT
 # ГОЛОВНА ЛОГІКА
 # ============================================
 
-def process_user_message(message):
+def process_user_message(message, session_id="default"):
 
     print("\n==============================")
     print("КОРИСТУВАЧ:", message)
+    print("СЕСІЯ:", session_id)
 
     # ============================================
-    # ПОШУК У БАЗІ
+    # 1. ПОШУК У БАЗІ
     # ============================================
 
-    result = search_knowledge(
-
-        message.lower()
-
-    )
+    result = search_knowledge(message.lower())
 
     print("РЕЗУЛЬТАТ БАЗИ:", result)
 
-    # ============================================
-    # ЯКЩО ЗНАЙШЛО
-    # ============================================
+    db_content = None
 
     if result:
-
-        return f"""
-
-📚 Знайдено у локальній базі:
-
-{result[0]}
-
-"""
+        db_content = result[0]   # content з бази
 
     # ============================================
-    # ЯКЩО НЕ ЗНАЙШЛО → GPT
+    # 2. GPT (завжди, якщо увімкнено)
     # ============================================
 
     if not USE_GPT:
 
-        return """
+        # Якщо GPT вимкнено — показуємо тільки базу
+        if db_content:
+            return f"""
+📚 Знайдено у локальній базі:
 
-❌ GPT вимкнено адміністратором.
-
+{db_content}
 """
+        return "❌ GPT вимкнено адміністратором."
 
     print("GPT ЗАПУЩЕНО")
 
     try:
 
-        answer = ask_gpt(message)
-
-        return f"""
-
-🤖 Відповідь GPT:
-
-{answer}
-
-"""
+        gpt_answer = ask_gpt(
+            user_message=message,
+            session_id=session_id,
+            context_from_db=db_content
+        )
 
     except Exception as error:
 
-        return f"""
+        # Якщо GPT впав, але є база — повертаємо базу
+        if db_content:
+            return f"""
+📚 Знайдено у локальній базі:
 
-❌ Помилка GPT:
+{db_content}
 
+⚠ GPT тимчасово недоступний:
 {error}
+"""
 
+        return f"❌ Помилка GPT:\n{error}"
+
+    # ============================================
+    # 3. ФОРМУЄМО КОМБІНОВАНУ ВІДПОВІДЬ
+    # ============================================
+
+    if db_content:
+        return f"""
+📚 З локальної бази:
+
+{db_content}
+
+━━━━━━━━━━━━━━━━━━━━━━
+
+🤖 Відповідь GPT:
+
+{gpt_answer}
+"""
+
+    # Якщо база нічого не знайшла — тільки GPT
+    return f"""
+🤖 Відповідь GPT:
+
+{gpt_answer}
 """
