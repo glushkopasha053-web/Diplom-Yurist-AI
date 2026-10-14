@@ -342,21 +342,32 @@ const typingLoader = document.getElementById("typing-loader");
 // =========================
 
 function addMessage(text, sender) {
-  const messageDiv = document.createElement("div");
+    const messageDiv = document.createElement("div");
 
-  messageDiv.classList.add("message");
+    if (sender === "user") {
+        messageDiv.classList.add("user-message");
+    } else {
+        messageDiv.classList.add("bot-message");
+    }
 
-  if (sender === "user") {
-    messageDiv.classList.add("user-message");
-  } else {
-    messageDiv.classList.add("bot-message");
-  }
+    // Аватар
+    const avatar = document.createElement("div");
+    avatar.classList.add("message-avatar");
+    avatar.textContent = (sender === "user") ? "👤" : "🤖";
 
-  messageDiv.innerText = text;
+    // Текст
+    const content = document.createElement("div");
+    content.classList.add("message-content");
+    content.innerText = text;
 
-  chatBox.appendChild(messageDiv);
+    // Збираємо
+    messageDiv.appendChild(avatar);
+    messageDiv.appendChild(content);
 
-  chatBox.scrollTop = chatBox.scrollHeight;
+    chatBox.appendChild(messageDiv);
+    chatBox.scrollTop = chatBox.scrollHeight;
+
+    if (typeof checkScrollButton === "function") checkScrollButton();
 }
 
 // =========================
@@ -1517,14 +1528,36 @@ async function downloadDoc(format) {
         ? "/download-pdf"
         : "/download-docx";
 
-    // Ім'я файлу — перша лінійка документа (назва)
-    let filename = "document";
+    // Створюємо безпечне ім'я файлу (латиницею, без зайвих символів у URL)
+    let filename = "legal_document";
     const firstLine = text.split("\n")[0].trim();
+    
     if (firstLine) {
-        filename = firstLine
-            .toLowerCase()
-            .replace(/[^a-zа-яїієґ0-9]+/gi, "_")
-            .substring(0, 40);
+        // Проста карта транслітерації українських літер для безпечного ім'я файлу
+        const translitMap = {
+            'а':'a', 'б':'b', 'в':'v', 'г':'h', 'ґ':'g', 'д':'d', 'е':'e', 'є':'ye',
+            'ж':'zh', 'з':'z', 'и':'y', 'і':'i', 'ї':'yi', 'й':'y', 'к':'k', 'л':'l',
+            'м':'m', 'н':'n', 'о':'o', 'п':'p', 'р':'r', 'с':'s', 'т':'t', 'у':'u',
+            'ф':'f', 'х':'kh', 'ц':'ts', 'ч':'ch', 'ш':'sh', 'щ':'shch', 'ю':'yu', 'я':'ya',
+            'ь':''
+        };
+
+        let cleanText = "";
+        for (let char of firstLine.toLowerCase()) {
+            if (translitMap[char] !== undefined) {
+                cleanText += translitMap[char];
+            } else if (/[a-z0-9]/.test(char)) {
+                cleanText += char;
+            } else {
+                cleanText += "_";
+            }
+        }
+
+        // Обрізаємо зайві підкреслення та довжину
+        cleanText = cleanText.replace(/_+/g, "_").replace(/^_|_$/g, "");
+        if (cleanText.length > 3) {
+            filename = cleanText.substring(0, 35);
+        }
     }
 
     try {
@@ -1553,8 +1586,8 @@ async function downloadDoc(format) {
 
         URL.revokeObjectURL(link.href);
 
-        // Очищуємо URL — прибираємо ?file=...
-history.replaceState(null, "", "/");
+        // Гарантовано очищуємо URL від будь-яких залишкових параметрів
+        window.history.replaceState(null, "", "/");
 
     } catch (error) {
         console.error("Помилка скачування:", error);
@@ -1574,13 +1607,25 @@ async function clearChat() {
         });
 
         // Очищаємо UI
-        const chatBox = document.getElementById("chat-box");
-        chatBox.innerHTML = `
-            <div class="bot-message">
-                Вітаю. Я юридичний AI-помічник.
-                Поставте ваше питання.
-            </div>
-        `;
+       const chatBox = document.getElementById("chat-box");
+chatBox.innerHTML = `
+    <div id="typing-loader" class="typing-loader hidden">
+        <div class="typing-dots">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        <p>AI думає...</p>
+    </div>
+
+    <div class="bot-message" id="welcome-message">
+        <div class="message-avatar">🤖</div>
+        <div class="message-content">
+            Вітаю. Я юридичний AI-помічник.
+            Поставте ваше питання — і я допоможу.
+        </div>
+    </div>
+`;
 
     } catch (error) {
         console.error("Помилка очищення:", error);
@@ -1771,3 +1816,35 @@ window.addEventListener("DOMContentLoaded", function () {
     currentTipIndex = randomIndex;
     tipEl.textContent = dailyTips[randomIndex];
 });
+
+/* =========================================
+   КНОПКА "ВНИЗ" + СКРОЛ
+========================================= */
+
+const scrollBottomBtn = document.getElementById("scroll-bottom-btn");
+
+function checkScrollButton() {
+    if (!scrollBottomBtn || !chatBox) return;
+
+    const distanceFromBottom =
+        chatBox.scrollHeight - chatBox.scrollTop - chatBox.clientHeight;
+
+    if (distanceFromBottom > 100) {
+        scrollBottomBtn.classList.remove("hidden");
+    } else {
+        scrollBottomBtn.classList.add("hidden");
+    }
+}
+
+if (scrollBottomBtn) {
+    scrollBottomBtn.addEventListener("click", function () {
+        chatBox.scrollTo({
+            top: chatBox.scrollHeight,
+            behavior: "smooth"
+        });
+    });
+}
+
+if (chatBox) {
+    chatBox.addEventListener("scroll", checkScrollButton);
+}

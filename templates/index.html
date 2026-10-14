@@ -136,53 +136,78 @@
     <div class="container hidden" id="main-content">
 
         
-    <!-- CHAT -->
+        <!-- CHAT -->
     <div id="chat-section" class="content-section">
 
-        <h1 id="chat-title">⚖ Юридичний AI-помічник</h1>
+        <!-- ЗАГОЛОВОК ЧАТУ -->
+        <div class="chat-header">
 
-        <p class="subtitle" id="chat-subtitle">
-            Інтелектуальна система юридичних консультацій
-        </p>
+            <div class="chat-header-icon">⚖</div>
 
-<button onclick="clearChat()" id="clear-chat-btn">
-    🗑 Очистити чат
-</button>
+            <div class="chat-header-content">
 
-        <div id="chat-box" class="chat-box">
+                <h1 id="chat-title">Юридичний AI-помічник</h1>
 
-            <div id="typing-loader" class="typing-loader hidden">
+                <p class="chat-subtitle-inline" id="chat-subtitle">
+                    Інтелектуальна система юридичних консультацій
+                </p>
 
-    <div class="typing-dots">
+                <div class="chat-status">
+                    <span class="status-dot"></span>
+                    <span>AI онлайн</span>
+                    <span class="chat-status-divider">•</span>
+                    <span>готовий відповісти</span>
+                </div>
 
-        <span></span>
-        <span></span>
-        <span></span>
-
-    </div>
-
-    <p>AI думає...</p>
-
-</div>
-
-            <div class="bot-message"
-            id="welcome-message">
-                Вітаю. Я юридичний AI-помічник.
-                Поставте ваше питання.
             </div>
 
         </div>
 
+        <!-- ЧАТ-БОКС -->
+        <div class="chat-wrapper">
+
+            <div id="chat-box" class="chat-box">
+
+                <div id="typing-loader" class="typing-loader hidden">
+                    <div class="typing-dots">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                    <p>AI думає...</p>
+                </div>
+
+                <div class="bot-message" id="welcome-message">
+                    <div class="message-avatar">🤖</div>
+                    <div class="message-content">
+                        Вітаю. Я юридичний AI-помічник.
+                        Поставте ваше питання — і я допоможу.
+                    </div>
+                </div>
+
+            </div>
+
+            <button class="scroll-bottom-btn hidden" id="scroll-bottom-btn" title="До низу">
+                ↓
+            </button>
+
+        </div>
+
+        <!-- ПОЛЕ ВВОДУ -->
         <div class="input-area">
 
             <input
                 type="text"
                 id="user-input"
-                placeholder="Введіть юридичне питання"
+                placeholder="Введіть юридичне питання..."
             >
 
-            <button onclick="sendMessage()" id="send-button">
-                Надіслати
+            <button onclick="sendMessage()" id="send-button" title="Надіслати">
+                ➤
+            </button>
+
+            <button onclick="clearChat()" id="clear-chat-btn" title="Очистити чат">
+                🗑
             </button>
 
         </div>
