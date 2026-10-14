@@ -26,11 +26,15 @@ const translations = {
 
     menuDocuments: "📄 Документи",
 
+    menuChecker: "📝 Перевірка документу",
+
     menuAbout: "ℹ Про програму",
 
     menuSettings: "⚙ Налаштування",
 
     menuGame: "🎮 Гра",
+
+    menuWeather: "☁ Погода",
 
     chatTitle: "⚖ Юридичний AI-помічник",
 
@@ -76,11 +80,15 @@ const translations = {
 
     menuDocuments: "📄 Documents",
 
+    menuChecker: "📝 Document Checker",
+
     menuAbout: "ℹ About",
 
     menuSettings: "⚙ Settings",
 
     menuGame: "🎮 Game",
+
+    menuWeather: "☁ Weather",
 
     chatTitle: "⚖ Legal AI Assistant",
 
@@ -131,18 +139,28 @@ function changeLanguage() {
 
   document.getElementById("logo-text").innerHTML = translations[lang].logoText;
 
-  document.getElementById("menu-chat").innerHTML = translations[lang].menuChat;
+    // Оновлюємо ТІЛЬКИ текст у кнопках, не чіпаючи іконки
+  const menuTexts = {
+    "menu-chat": "menuChat",
+    "menu-documents": "menuDocuments",
+    "menu-checker": "menuChecker",
+    "menu-about": "menuAbout",
+    "menu-settings": "menuSettings",
+    "menu-game": "menuGame",
+    "menu-weather": "menuWeather"
+  };
 
-  document.getElementById("menu-documents").innerHTML =
-    translations[lang].menuDocuments;
-
-  document.getElementById("menu-about").innerHTML =
-    translations[lang].menuAbout;
-
-  document.getElementById("menu-settings").innerHTML =
-    translations[lang].menuSettings;
-
-  document.getElementById("menu-game").innerHTML = translations[lang].menuGame;
+  for (const [id, key] of Object.entries(menuTexts)) {
+    const btn = document.getElementById(id);
+    if (btn) {
+      const textEl = btn.querySelector(".menu-btn-text");
+      if (textEl) {
+        textEl.innerHTML = translations[lang][key];
+      } else {
+        btn.innerHTML = translations[lang][key];
+      }
+    }
+  }
 
   // CHAT
 
@@ -221,19 +239,37 @@ function toggleSidebar() {
 }
 
 function showSection(sectionId) {
-  // знаходимо всі секції
-  const sections = document.querySelectorAll(".content-section");
 
-  // ховаємо всі секції
-  sections.forEach((section) => {
-    section.classList.add("hidden");
-  });
+    // ховаємо всі секції
+    document.querySelectorAll(".content-section").forEach(section => {
+        section.classList.add("hidden");
+    });
 
-  // показуємо потрібну
-  document.getElementById(sectionId).classList.remove("hidden");
+    // показуємо потрібну
+    document.getElementById(sectionId).classList.remove("hidden");
 
-  // закриваємо sidebar
-  toggleSidebar();
+    // ПІДСВІЧУЄМО активну кнопку
+    document.querySelectorAll(".menu-btn").forEach(btn => {
+        btn.classList.remove("active");
+    });
+
+    const menuMap = {
+        "chat-section": "menu-chat",
+        "documents-section": "menu-documents",
+        "checker-section": "menu-checker",
+        "game-section": "menu-game",
+        "about-section": "menu-about",
+        "settings-section": "menu-settings"
+    };
+
+    const menuId = menuMap[sectionId];
+    if (menuId) {
+        const activeBtn = document.getElementById(menuId);
+        if (activeBtn) activeBtn.classList.add("active");
+    }
+
+    // закриваємо sidebar
+    toggleSidebar();
 }
 
 function scrollToChat() {
@@ -1690,3 +1726,48 @@ function showDailyQuote() {
 
 // Запускаємо після завантаження
 window.addEventListener("DOMContentLoaded", showDailyQuote);
+
+/* =========================================
+   ПОРАДА ДНЯ — змінюється автоматично
+========================================= */
+
+const dailyTips = [
+    "Опишіть ситуацію детально, щоб AI відповів точніше.",
+    "Вкажіть дати, суми та сторони — це важливо для аналізу.",
+    "Завантажте документ у PDF або DOCX — AI проаналізує його.",
+    "Опишіть ситуацію — AI складе позов, скаргу чи клопотання.",
+    "Питайте уточнюючі питання — AI пам'ятає ваш діалог.",
+    "Чим більше деталей — тим точніша юридична відповідь.",
+    "Перевірте документ перед підписанням — AI допоможе.",
+    "Не знаєте, як скласти позов? Опишіть ситуацію — AI зробить.",
+    "Використовуйте чат для уточнень — історія зберігається.",
+    "Знайдіть потрібну статтю закону — запитайте в чаті."
+];
+
+let currentTipIndex = 0;
+
+function rotateTip() {
+    const tipEl = document.getElementById("sidebar-tip-text");
+    if (!tipEl) return;
+
+    tipEl.classList.add("changing");
+
+    setTimeout(() => {
+        currentTipIndex = (currentTipIndex + 1) % dailyTips.length;
+        tipEl.textContent = dailyTips[currentTipIndex];
+        tipEl.classList.remove("changing");
+    }, 300);
+}
+
+// Змінювати пораду кожні 30 секунд
+setInterval(rotateTip, 30000);
+
+// Перша порада при завантаженні — випадкова
+window.addEventListener("DOMContentLoaded", function () {
+    const tipEl = document.getElementById("sidebar-tip-text");
+    if (!tipEl) return;
+
+    const randomIndex = Math.floor(Math.random() * dailyTips.length);
+    currentTipIndex = randomIndex;
+    tipEl.textContent = dailyTips[randomIndex];
+});

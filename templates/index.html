@@ -15,57 +15,74 @@
 <!-- SIDEBAR -->
 <div class="sidebar" id="sidebar">
 
-    <button class="close-btn" onclick="toggleSidebar()">
+    <button class="close-btn" onclick="toggleSidebar()" aria-label="Закрити">
         ✕
     </button>
 
-    <h2 class="logo" id="logo-text">⚖ Юрист AI</h2>
+    <!-- ЛОГОТИП -->
+    <div class="sidebar-logo">
+        <div class="sidebar-logo-icon">⚖</div>
+        <h2 class="logo" id="logo-text">Юрист AI</h2>
+        <p class="sidebar-logo-subtitle">Юридичні консультації</p>
+    </div>
 
-    <button class="menu-btn" onclick="showSection('chat-section')"
-    id="menu-chat">
-    💬 Чат
-</button>
+    <!-- ГОЛОВНЕ -->
+    <div class="sidebar-section-title">Головне</div>
 
-<button class="menu-btn" onclick="showSection('documents-section')"
-id="menu-documents">
-    📄 Документи
-</button>
+    <button class="menu-btn" onclick="showSection('chat-section')" id="menu-chat">
+        <span class="menu-btn-icon icon-purple">💬</span>
+        <span class="menu-btn-text">Чат</span>
+    </button>
 
-<button class="menu-btn"
-        onclick="showSection('checker-section')"
-        id="menu-checker">
-    🔍 Перевірка документів
-</button>
+    <button class="menu-btn" onclick="showSection('documents-section')" id="menu-documents">
+        <span class="menu-btn-icon icon-blue">📄</span>
+        <span class="menu-btn-text">Документи</span>
+    </button>
 
+    <button class="menu-btn" onclick="showSection('checker-section')" id="menu-checker">
+        <span class="menu-btn-icon icon-green">🔍</span>
+        <span class="menu-btn-text">Перевірка документів</span>
+    </button>
 
-<button class="menu-btn"
-onclick="showSection('game-section')"
-id="menu-game">
+    <button class="menu-btn" onclick="showSection('game-section')" id="menu-game">
+        <span class="menu-btn-icon icon-orange">🎮</span>
+        <span class="menu-btn-text">Гра</span>
+    </button>
 
-    🎮 Гра
+    <button class="menu-btn" onclick="showSection('weather-section')" id="menu-weather">
+        <span class="menu-btn-icon icon-cyan">☁</span>
+        <span class="menu-btn-text">Погода</span>
+    </button>
 
-</button>
+    <!-- ІНШЕ -->
+    <div class="sidebar-section-title">Інше</div>
 
-<button
-class="menu-btn"
-onclick="showSection('weather-section')">
+    <button class="menu-btn" onclick="showSection('about-section')" id="menu-about">
+        <span class="menu-btn-icon icon-gray">ℹ</span>
+        <span class="menu-btn-text">Про програму</span>
+    </button>
 
-☁ Погода
+    <button class="menu-btn" onclick="showSection('settings-section')" id="menu-settings">
+        <span class="menu-btn-icon icon-red">⚙</span>
+        <span class="menu-btn-text">Налаштування</span>
+    </button>
 
-</button>
-
-<button class="menu-btn" onclick="showSection('about-section')"
-id="menu-about">
-    ℹ Про програму
-</button>
-
-<button class="menu-btn" onclick="showSection('settings-section')"
-id="menu-settings">
-    ⚙ Налаштування
-</button>
-
+        <!-- ПОРАДА ДНЯ -->
+    <div class="sidebar-tip-wrap">
+        <div class="sidebar-tip">
+            <div class="sidebar-tip-header">
+                <span class="sidebar-tip-icon">💡</span>
+                <span class="sidebar-tip-title">Порада дня</span>
+            </div>
+            <p class="sidebar-tip-text" id="sidebar-tip-text">
+                Опишіть ситуацію детально,
+                щоб AI відповів точніше.
+            </p>
+        </div>
+    </div>
 
 </div>
+
 
 <!-- BURGER -->
 <button class="open-sidebar" onclick="toggleSidebar()">
