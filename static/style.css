@@ -2582,3 +2582,99 @@ body.bg-paused {
         font-size: 18px;
     }
 }
+
+
+/* =========================================
+   ВИПРАВЛЕННЯ БОКОВОГО МЕНЮ НА ТЕЛЕФОНАХ
+   Стилі ПК не змінюються
+========================================= */
+
+@media (max-width: 768px) {
+
+    /* Меню повністю поміщається по ширині */
+    .sidebar {
+        width: min(300px, 88vw);
+        height: 100vh;
+        height: 100dvh;
+        left: 0;
+
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+
+        overflow-x: hidden;
+        overflow-y: auto;
+        overscroll-behavior-y: contain;
+        -webkit-overflow-scrolling: touch;
+
+        /* Закрите меню приховане за лівим краєм */
+        transform: translateX(-110%);
+        transition: transform 0.35s ease;
+
+        z-index: 3001;
+    }
+
+    /* Відкрите меню плавно виїжджає */
+    .sidebar.active {
+        left: 0;
+        transform: translateX(0);
+    }
+
+    /* Логотип не стискається */
+    .sidebar-logo {
+        flex-shrink: 0;
+        text-align: center;
+    }
+
+    .sidebar-logo-icon {
+        flex-shrink: 0;
+    }
+
+    /* Пункти меню зручні для натискання пальцем */
+    .menu-btn {
+        width: 100%;
+        min-height: 46px;
+        box-sizing: border-box;
+        flex-shrink: 0;
+    }
+
+    .menu-btn span {
+        overflow-wrap: anywhere;
+    }
+
+    /* Нижній інформаційний блок не обрізається */
+    .sidebar-tip-wrap {
+        margin-top: auto;
+        padding-top: 16px;
+        flex-shrink: 0;
+    }
+
+    /* Кнопка закриття поверх вмісту меню */
+    .close-btn {
+        z-index: 3;
+        flex-shrink: 0;
+    }
+
+    /* Затемнення нижче меню */
+    .overlay {
+        z-index: 3000;
+    }
+
+    /* Кнопка відкриття залишається доступною */
+    .open-sidebar {
+        z-index: 3002;
+    }
+}
+
+/* Дуже вузькі телефони */
+@media (max-width: 380px) {
+    .sidebar {
+        width: min(270px, 90vw);
+    }
+
+    .menu-btn {
+        padding: 8px 10px;
+        font-size: 13px;
+    }
+}
+
