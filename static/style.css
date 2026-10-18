@@ -1177,8 +1177,11 @@ body::before {
         max-width: 290px !important;
         left: -100% !important;
         overflow-y: auto !important;
-        padding: 12px 12px 10px !important;
-    }
+        padding: 10px 10px 10px !important;
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: flex-start !important; /* Прибирає розтягування, елементи йдуть один за одним */
+        gap: 8px !important; /* Невеликий акуратний відступ між усіма блоками */
 
     .sidebar.active {
         left: 0 !important;
