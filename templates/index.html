@@ -85,7 +85,7 @@
 
 
 <!-- BURGER -->
-<button class="open-sidebar" onclick="toggleSidebar()">
+<button class="open-sidebar" onclick="toggleSidebar()" title="Меню">
     ☰
 </button>
 
@@ -204,6 +204,15 @@
 
             <button onclick="sendMessage()" id="send-button" title="Надіслати">
                 ➤
+            </button>
+
+<!-- Кнопки експорту (компактні іконки з підказками) -->
+            <button onclick="exportChat('pdf')" class="btn-export-icon btn-pdf" title="Експорт в PDF">
+                📄
+            </button>
+
+            <button onclick="exportChat('docx')" class="btn-export-icon btn-docx" title="Експорт в DOCX">
+                📝
             </button>
 
             <button onclick="clearChat()" id="clear-chat-btn" title="Очистити чат">

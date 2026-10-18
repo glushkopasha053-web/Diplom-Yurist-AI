@@ -4,14 +4,10 @@
 # ============================================
 
 from openai import OpenAI
-
-from app.database import save_knowledge
-
 import os
-import re 
+from app.database import save_knowledge
 from app.config import GPT_MODEL
 from app.config import GPT_MAX_TOKENS
-from app.config import SAVE_GPT_ANSWERS
 from dotenv import load_dotenv
 from app.config import GPT_ANALYSIS_TOKENS  
     
@@ -34,7 +30,7 @@ client = OpenAI(
 chat_history = {}
 
 # Максимум повідомлень у пам'яті (щоб не переповнити токени)
-MAX_HISTORY = 10
+MAX_HISTORY = 35
 
 
 def get_history(session_id):
@@ -62,7 +58,7 @@ def clear_history(session_id):
     chat_history.pop(session_id, None)
 
 
-def ask_gpt(user_message, session_id="default", context_from_db=None):
+def ask_gpt(user_message, session_id="default"):
 
     # ============================================
     # ФОРМУЄМО ПОВІДОМЛЕННЯ
@@ -84,15 +80,6 @@ def ask_gpt(user_message, session_id="default", context_from_db=None):
         {"role": "system", "content": system_content}
     ]
 
-    # Додаємо контекст з бази (якщо є)
-    if context_from_db:
-        messages.append({
-            "role": "system",
-            "content": (
-                "Додаткова інформація з локальної бази знань "
-                f"(використай її, якщо доречно):\n\n{context_from_db}"
-            )
-        })
 
     # Додаємо історію діалогу
     messages.extend(get_history(session_id))
@@ -125,62 +112,23 @@ def ask_gpt(user_message, session_id="default", context_from_db=None):
     add_to_history(session_id, "user", user_message)
     add_to_history(session_id, "assistant", answer)
 
-    # ============================================
-    # КЛЮЧОВІ СЛОВА (для збереження в базу)
-    # ============================================
 
-    clean_text = re.sub(r"[^\w\s]", " ", user_message.lower())
-    words = clean_text.split()
 
-    stop_words = {
-        "як", "що", "де", "коли", "для", "та", "і",
-        "в", "на", "про", "це", "чи", "у", "з", "по",
-        "до", "від", "за", "або", "але", "не", "ні",
-        "мені", "мене", "мій", "моя", "моє", "я",
-        "ти", "він", "вона", "воно", "ми", "ви", "вони",
-        "хочу", "можна", "треба", "потрібно", "поясни",
-        "розкажи", "допоможи", "будь", "ласка",
-        "подати", "подай", "подаю", "подається",
-        "отримати", "отримаю", "зробити", "зроби",
-    }
-
-    endings = [
-        "ами", "ями", "ові", "еві", "ого", "ому",
-        "ою", "ею", "ий", "ій", "ої",
-        "ах", "ях", "ам", "ям", "ів", "їв",
-        "а", "я", "у", "ю", "и", "і", "е", "о",
-    ]
-
-    keywords_list = []
-
-    for word in words:
-        if word in stop_words or len(word) <= 3:
-            continue
-
-        for ending in endings:
-            if word.endswith(ending) and len(word) - len(ending) >= 4:
-                word = word[:-len(ending)]
-                break
-
-        keywords_list.append(word)
-
-    keywords = ",".join(
-        list(dict.fromkeys(keywords_list))[:10]
-    )
-
-    # ============================================
-    # АВТОЗБЕРЕЖЕННЯ У БАЗУ
-    # ============================================
-
-    if SAVE_GPT_ANSWERS:
+#  ЗБЕРЕЖЕННЯ У БАЗУ 
+    try:
+        from app.database import save_knowledge
         save_knowledge(
-            title=user_message[:50],
-            keywords=keywords,
-            content=answer,
-            source="gpt"
+            title=user_message[:50],          # Заголовок — перші 50 символів питання
+            keywords="chat_history",          # Мітка
+            content=answer,                   # Відповідь AI
+            source="gpt"                      # Джерело
         )
+    except Exception as e:
+        print("Помилка збереження в базу:", e)
+    # -----------------------------------------------------------
 
     return answer
+
 # ============================================
 # ЮРИДИЧНИЙ АНАЛІЗ ДОКУМЕНТА
 # ============================================
@@ -272,3 +220,34 @@ def generate_legal_document(situation):
     )
 
     return response.choices[0].message.content
+
+# ============================================
+# ЕКСПОРТ ІСТОРІЇ ЧАТУ У ТЕКСТ
+# ============================================
+
+def export_chat_history_text(session_id="default"):
+    """
+    Форматує історію діалогу сесії у вигляді тексту для генерації PDF/DOCX.
+    """
+    history = get_history(session_id)
+    
+    if not history:
+        return None
+
+    lines = [
+        "ЮРИДИЧНИЙ AI-ПОМІЧНИК — ПРОТОКОЛ КОНСУЛЬТАЦІЇ",
+        "=" * 45,
+        ""
+    ]
+
+    for msg in history:
+        role = msg.get("role")
+        content = msg.get("content", "").strip()
+
+        if role == "user":
+            lines.append(f"👤 КЛІЄНТ:\n{content}\n")
+        elif role == "assistant":
+            lines.append(f"🤖 ЮРИДИЧНИЙ АСИСТЕНТ:\n{content}\n")
+            lines.append("-" * 45 + "\n")
+
+    return "\n".join(lines)

@@ -9,7 +9,7 @@ from flask import jsonify
 from flask import send_file
 from app.document_generator import create_pdf, create_docx
 from app.document_checker import extract_document_text
-from app.gpt_memory import analyze_document, generate_legal_document
+from app.gpt_memory import analyze_document, generate_legal_document,export_chat_history_text
 
 from app.logic import process_user_message
 # Weather
@@ -272,9 +272,46 @@ def generate_document_route():
         }), 500
 
 # ============================================
+# API: ЕКСПОРТ ІСТОРІЇ ЧАТУ
+# ============================================
+
+@app.route("/api/export-chat", methods=["POST"])
+def export_chat():
+    data = request.get_json() or {}
+    session_id = data.get("session_id", "default")
+    file_format = data.get("format", "pdf").lower()  # pdf або docx
+
+    # Отримуємо сформований текст історії
+    chat_text = export_chat_history_text(session_id)
+
+    if not chat_text:
+        return jsonify({
+            "success": False,
+            "error": "Історія чату порожня. Немає чого експортувати."
+        }), 400
+
+    try:
+        if file_format == "docx":
+            filepath = create_docx(chat_text, "legal_consultation.docx")
+            return send_file(filepath, as_attachment=True)
+        else:
+            filepath = create_pdf(chat_text, "legal_consultation.pdf")
+            return send_file(filepath, as_attachment=True)
+
+    except Exception as error:
+        app.logger.exception("Помилка експорту історії чату")
+        return jsonify({
+            "success": False,
+            "error": f"Не вдалося створити файл: {error}"
+        }), 500
+
+# ============================================
 # START
 # ============================================
 
 if __name__ == "__main__":
 
     app.run(debug=True)
+    
+    
+    

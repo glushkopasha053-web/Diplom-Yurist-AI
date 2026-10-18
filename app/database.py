@@ -145,6 +145,19 @@ def search_knowledge(user_message):
 
     result = cursor.fetchone()
 
+    # ---- ДОДАНИЙ ЗАХИСТ ВІД ПЛУТАНИНИ ТЕМ ----
+    if result:
+        content, title, score = result
+        user_lower = user_message.lower()
+        content_lower = content.lower()
+
+        if "тцк" in user_lower and "поліці" in content_lower and "тцк" not in content_lower:
+            conn.close()
+            return None
+        if "поліці" in user_lower and "тцк" in content_lower and "поліці" not in content_lower:
+            conn.close()
+            return None
+
     conn.close()
 
     return result

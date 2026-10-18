@@ -1848,3 +1848,45 @@ if (scrollBottomBtn) {
 if (chatBox) {
     chatBox.addEventListener("scroll", checkScrollButton);
 }
+
+/* =========================================
+   ЕКСПОРТ ІСТОРІЇ ЧАТУ (PDF / DOCX)
+========================================= */
+
+async function exportChat(format) {
+    const sessionId = getSessionId();
+
+    try {
+        const response = await fetch("/api/export-chat", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                session_id: sessionId,
+                format: format
+            })
+        });
+
+        if (!response.ok) {
+            const errData = await response.json();
+            alert(errData.error || "Не вдалося експортувати історію чату.");
+            return;
+        }
+
+        // Отримуємо файл як Blob та автоматично завантажуємо
+        const blob = await response.blob();
+        const downloadUrl = window.URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = downloadUrl;
+        a.download = `legal_consultation.${format}`;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        window.URL.revokeObjectURL(downloadUrl);
+
+    } catch (error) {
+        console.error("Помилка при експорті:", error);
+        alert("Сталася помилка при завантаженні файла.");
+    }
+}

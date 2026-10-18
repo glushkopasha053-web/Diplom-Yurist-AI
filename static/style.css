@@ -190,49 +190,48 @@ body::before {
 
 
 
-/* Кнопка бургер */
+/* Кнопка бургер (Металевий неоновий диск — ідеально помітна) */
 
 .open-sidebar {
-
     position: fixed;
-
     top: 20px;
     left: 20px;
 
-    width: 55px;
-    height: 55px;
+    width: 73px;
+    height: 73px;
 
-    border: none;
-
-    border-radius: 16px;
-
-    background: linear-gradient(135deg, #2563eb, #1d4ed8);
-
-    color: white;
-
-    font-size: 28px;
-
+    border-radius: 50%; /* Кругла форма */
+    background: rgba(15, 23, 42, 0.95);
+    border: 2.5px solid rgba(168, 85, 247, 0.8); /* Товстий фіолетовий неоновий контур */
+    color: #ffffff;
+    font-size: 43px;
     cursor: pointer;
-
     z-index: 2500;
 
-    transition: 0.3s;
+    box-shadow: 
+        0 8px 25px rgba(0, 0, 0, 0.6),
+        0 0 20px rgba(168, 85, 247, 0.5),
+        inset 0 0 10px rgba(168, 85, 247, 0.2);
+
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-/* Hover */
-
+/* Hover-ефект */
 .open-sidebar:hover {
-    transform: scale(1.08);
-
-    background: linear-gradient(135deg, #7c3aed, #2563eb);
-
-    box-shadow:
-        0 8px 25px rgba(139, 92, 246, 0.55),
-        0 0 20px rgba(139, 92, 246, 0.4);
+    transform: scale(1.1) rotate(90deg); /* Плавний поворот при наведенні */
+    border-color: #c084fc;
+    background: rgba(30, 41, 59, 1);
+    box-shadow: 
+        0 12px 35px rgba(0, 0, 0, 0.8),
+        0 0 30px rgba(168, 85, 247, 0.8),
+        inset 0 0 15px rgba(168, 85, 247, 0.4);
 }
 
 .open-sidebar:active {
-    transform: scale(1.0);
+    transform: scale(1.02) rotate(90deg);
 }
 
 
@@ -1664,7 +1663,7 @@ body.bg-paused {
 }
 
 /* =========================================
-   SIDEBAR — ПОВНЕ ОФОРМЛЕННЯ
+   SIDEBAR — ОПТИМІЗОВАНИЙ БЕЗ СКРОЛБАРУ
 ========================================= */
 
 .sidebar {
@@ -1675,6 +1674,7 @@ body.bg-paused {
     height: 100vh;
     height: 100svh;
     padding: 20px 16px 16px;
+    box-sizing: border-box;
     background: rgba(5, 10, 25, 0.96);
     backdrop-filter: blur(24px);
     -webkit-backdrop-filter: blur(24px);
@@ -1684,50 +1684,29 @@ body.bg-paused {
     box-shadow: 8px 0 40px rgba(0, 0, 0, 0.5);
     display: flex;
     flex-direction: column;
-    overflow-y: auto;
-    overflow-x: hidden;
-    scrollbar-width: thin;
-    scrollbar-color: rgba(139, 92, 246, 0.3) transparent;
-}
-
-/* СКРОЛБАР — тільки коли sidebar відкритий */
-.sidebar::-webkit-scrollbar { 
-    width: 0;                          /* ← ховаємо за замовчуванням */
-}
-
-.sidebar.active::-webkit-scrollbar { 
-    width: 4px;                        /* ← показуємо коли відкритий */
-}
-
-.sidebar::-webkit-scrollbar-thumb {
-    background: rgba(139, 92, 246, 0.3);
-    border-radius: 4px;
-}
-
-.sidebar::-webkit-scrollbar-thumb:hover {
-    background: rgba(139, 92, 246, 0.6);
-}
-
-.sidebar::-webkit-scrollbar { width: 4px; }
-.sidebar::-webkit-scrollbar-thumb {
-    background: rgba(139, 92, 246, 0.3);
-    border-radius: 4px;
+    justify-content: space-between;
+    overflow: hidden !important;
 }
 
 .sidebar.active { left: 0; }
 
+.sidebar::-webkit-scrollbar { 
+    display: none !important;
+    width: 0 !important;
+}
+
 /* ХРЕСТИК */
 .close-btn {
     position: absolute;
-    top: 18px;
-    right: 18px;
-    width: 38px;
-    height: 38px;
+    top: 14px;
+    right: 14px;
+    width: 42px;
+    height: 42px;
     border-radius: 50%;
     border: 1px solid rgba(255, 255, 255, 0.1);
     background: rgba(255, 255, 255, 0.06);
     color: #cbd5e1;
-    font-size: 18px;
+    font-size: 20px;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.25s ease;
@@ -1742,166 +1721,113 @@ body.bg-paused {
     border-color: transparent;
     color: white;
     transform: rotate(90deg) scale(1.1);
-    box-shadow:
-        0 0 20px rgba(139, 92, 246, 0.55),
-        0 0 40px rgba(139, 92, 246, 0.3);
 }
-
-.close-btn:active { transform: rotate(90deg) scale(0.95); }
 
 /* ЛОГОТИП */
 .sidebar-logo {
     text-align: center;
-    padding: 22px 0 16px;
-    margin-bottom: 8px;
+    padding: 4px 0 8px;
+    margin-bottom: 2px;
     border-bottom: 1px solid rgba(139, 92, 246, 0.15);
     flex-shrink: 0;
 }
 
 .sidebar-logo-icon {
-    width: 62px;
-    height: 62px;
-    margin: 0 auto 14px;
+    width: 60px;
+    height: 60px;
+    margin: 0 auto 6px;
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 20px;
+    border-radius: 14px;
     background: linear-gradient(135deg, #8b5cf6, #3b82f6);
     color: white;
-    font-size: 30px;
-    box-shadow:
-        0 10px 25px rgba(139, 92, 246, 0.45),
-        0 0 30px rgba(139, 92, 246, 0.25);
-    animation: pulseSidebarLogo 3s ease-in-out infinite;
-}
-
-@keyframes pulseSidebarLogo {
-    0%, 100% {
-        box-shadow:
-            0 10px 25px rgba(139, 92, 246, 0.45),
-            0 0 30px rgba(139, 92, 246, 0.25);
-    }
-    50% {
-        box-shadow:
-            0 10px 30px rgba(139, 92, 246, 0.7),
-            0 0 50px rgba(139, 92, 246, 0.4);
-    }
+    font-size: 28px;
+    box-shadow: 0 6px 18px rgba(139, 92, 246, 0.35);
 }
 
 .sidebar-logo .logo {
-    margin: 0 0 4px;
-    font-size: 24px;
+    margin: 0 0 2px;
+    font-size: 26px;
     font-weight: 700;
-    letter-spacing: -0.3px;
     background: linear-gradient(110deg, #ffffff 20%, #c4b5fd 100%);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
-    line-height: 1.2;
 }
 
 .sidebar-logo-subtitle {
     margin: 0;
-    font-size: 12px;
+    font-size: 14px;
     color: #94a3b8;
-    font-weight: 400;
-    letter-spacing: 0.3px;
 }
 
 /* РОЗДІЛЮВАЧ */
 .sidebar-section-title {
-    margin: 10px 8px 4px;
-    font-size: 11px;
+    margin: 4px 6px 2px;
+    font-size: 10px;
     font-weight: 600;
     text-transform: uppercase;
-    letter-spacing: 1.2px;
+    letter-spacing: 1px;
     color: #64748b;
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 8px;
 }
 
 .sidebar-section-title::after {
     content: "";
     flex: 1;
     height: 1px;
-    background: linear-gradient(90deg,
-        rgba(139, 92, 246, 0.3),
-        transparent);
+    background: linear-gradient(90deg, rgba(139, 92, 246, 0.3), transparent);
 }
 
 /* КНОПКИ МЕНЮ */
 .menu-btn {
     width: 100%;
-    padding: 8px 12px;
-    margin-bottom: 4px;
+    padding: 14px 16px;
+    margin-bottom: 11px;
     border: 1px solid transparent;
-    border-radius: 14px;
+    border-radius: 11px;
     background: rgba(255, 255, 255, 0.03);
     color: white;
-    font-size: 15px;
+    font-size: 19px;
     font-weight: 500;
     cursor: pointer;
-    transition: all 0.25s ease;
+    transition: all 0.2s ease;
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 10px;
     text-align: left;
     position: relative;
     flex-shrink: 0;
+    box-sizing: border-box;
 }
 
 .menu-btn:hover {
     background: rgba(139, 92, 246, 0.12);
     border-color: rgba(139, 92, 246, 0.3);
-    transform: translateX(4px);
-    box-shadow: 0 4px 15px rgba(139, 92, 246, 0.15);
+    transform: translateX(3px);
 }
 
-.menu-btn:active { transform: translateX(2px) scale(0.99); }
-
 .menu-btn-icon {
-    width: 40px;
-    height: 40px;
+    width: 36px;
+    height: 32px;
     flex-shrink: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 11px;
-    font-size: 19px;
-    transition: all 0.25s ease;
+    border-radius: 9px;
+    font-size: 15px;
 }
 
-.menu-btn:hover .menu-btn-icon { transform: scale(1.08); }
-
-.icon-purple {
-    background: rgba(139, 92, 246, 0.2);
-    border: 1px solid rgba(139, 92, 246, 0.35);
-}
-.icon-blue {
-    background: rgba(59, 130, 246, 0.2);
-    border: 1px solid rgba(59, 130, 246, 0.35);
-}
-.icon-green {
-    background: rgba(34, 197, 94, 0.2);
-    border: 1px solid rgba(34, 197, 94, 0.35);
-}
-.icon-orange {
-    background: rgba(249, 115, 22, 0.2);
-    border: 1px solid rgba(249, 115, 22, 0.35);
-}
-.icon-cyan {
-    background: rgba(6, 182, 212, 0.2);
-    border: 1px solid rgba(6, 182, 212, 0.35);
-}
-.icon-gray {
-    background: rgba(148, 163, 184, 0.2);
-    border: 1px solid rgba(148, 163, 184, 0.35);
-}
-.icon-red {
-    background: rgba(239, 68, 68, 0.2);
-    border: 1px solid rgba(239, 68, 68, 0.35);
-}
+.icon-purple { background: rgba(139, 92, 246, 0.2); border: 1px solid rgba(139, 92, 246, 0.35); }
+.icon-blue { background: rgba(59, 130, 246, 0.2); border: 1px solid rgba(59, 130, 246, 0.35); }
+.icon-green { background: rgba(34, 197, 94, 0.2); border: 1px solid rgba(34, 197, 94, 0.35); }
+.icon-orange { background: rgba(249, 115, 22, 0.2); border: 1px solid rgba(249, 115, 22, 0.35); }
+.icon-cyan { background: rgba(6, 182, 212, 0.2); border: 1px solid rgba(6, 182, 212, 0.35); }
+.icon-gray { background: rgba(148, 163, 184, 0.2); border: 1px solid rgba(148, 163, 184, 0.35); }
+.icon-red { background: rgba(239, 68, 68, 0.2); border: 1px solid rgba(239, 68, 68, 0.35); }
 
 .menu-btn-text {
     flex: 1;
@@ -1912,92 +1838,41 @@ body.bg-paused {
 }
 
 .menu-btn.active {
-    background: linear-gradient(135deg,
-        rgba(139, 92, 246, 0.25),
-        rgba(59, 130, 246, 0.15));
+    background: linear-gradient(135deg, rgba(139, 92, 246, 0.25), rgba(59, 130, 246, 0.15));
     border-color: rgba(139, 92, 246, 0.5);
-    box-shadow: 0 4px 20px rgba(139, 92, 246, 0.25);
 }
 
-.menu-btn.active::before {
-    content: "";
-    position: absolute;
-    left: -18px;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 4px;
-    height: 60%;
-    border-radius: 0 4px 4px 0;
-    background: linear-gradient(180deg, #8b5cf6, #3b82f6);
-    box-shadow: 0 0 15px rgba(139, 92, 246, 0.7);
-}
-
-/* =========================================
-   ПОРАДА ДНЯ
-========================================= */
-
+/* ПОРАДА ДНЯ (ВНИЗУ) */
 .sidebar-tip-wrap {
-    margin-top: 10px;
-    padding-top: 0px;
-    padding-bottom: 10px;              
-    flex-shrink: 0;                   
+    margin-top: auto;
+    padding-top: 4px;
+    padding-bottom: 2px;
+    flex-shrink: 0;
 }
 
 .sidebar-tip {
-    padding: 12px 14px;
-    border-radius: 14px;
-    background: linear-gradient(135deg,
-        rgba(139, 92, 246, 0.12),
-        rgba(59, 130, 246, 0.08));
-    border: 1px solid rgba(139, 92, 246, 0.25);
-    transition: 0.25s ease;
+    padding: 19px 21px;
+    border-radius: 11px;
+    background: linear-gradient(135deg, rgba(139, 92, 246, 0.15), rgba(59, 130, 246, 0.1));
+    border: 1px solid rgba(139, 92, 246, 0.3);
     position: relative;
     overflow: hidden;
-}
-
-.sidebar-tip::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 3px;
-    height: 100%;
-    background: linear-gradient(180deg, #fbbf24, #f59e0b);
-    box-shadow: 0 0 15px rgba(251, 191, 36, 0.5);
-}
-
-.sidebar-tip:hover {
-    background: linear-gradient(135deg,
-        rgba(139, 92, 246, 0.2),
-        rgba(59, 130, 246, 0.15));
-    border-color: rgba(139, 92, 246, 0.5);
-    box-shadow: 0 6px 20px rgba(139, 92, 246, 0.25);
-    transform: translateY(-2px);
 }
 
 .sidebar-tip-header {
     display: flex;
     align-items: center;
-    gap: 8px;
-    margin-bottom: 8px;
+    gap: 6px;
+    margin-bottom: 4px;
 }
 
-.sidebar-tip-icon {
-    font-size: 18px;
-    flex-shrink: 0;
-    animation: tipIconPulse 3s ease-in-out infinite;
-}
-
-@keyframes tipIconPulse {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.15); }
-}
+.sidebar-tip-icon { font-size: 20px; flex-shrink: 0; }
 
 .sidebar-tip-title {
-    font-size: 11px;
+    font-size: 10px;
     font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 1.1px;
+    letter-spacing: 1px;
     background: linear-gradient(110deg, #fbbf24, #f59e0b);
     -webkit-background-clip: text;
     background-clip: text;
@@ -2006,124 +1881,9 @@ body.bg-paused {
 
 .sidebar-tip-text {
     margin: 0;
-    font-size: 12px;
+    font-size: 14px;
     line-height: 1.5;
     color: #cbd5e1;
-    font-weight: 400;
-    transition: opacity 0.3s ease, transform 0.3s ease;
-}
-
-.sidebar-tip-text.changing {
-    opacity: 0;
-    transform: translateY(5px);
-}
-
-/* ===== МОБІЛЬНА ВЕРСІЯ SIDEBAR ===== */
-
-@media (max-width: 768px) {
-
-    .sidebar {
-        width: 280px;
-        left: -300px;
-        padding: 20px 14px 16px;
-    }
-
-    .sidebar.active { left: 0; }
-
-    .close-btn {
-        top: 14px;
-        right: 14px;
-        width: 34px;
-        height: 34px;
-        font-size: 16px;
-    }
-
-    .sidebar-logo { padding: 24px 0 16px; }
-
-    .sidebar-logo-icon {
-        width: 52px;
-        height: 52px;
-        font-size: 24px;
-        border-radius: 16px;
-        margin-bottom: 10px;
-    }
-
-    .sidebar-logo .logo { font-size: 20px; }
-    .sidebar-logo-subtitle { font-size: 11px; }
-
-    .sidebar-section-title {
-        font-size: 10px;
-        margin: 12px 6px 6px;
-        letter-spacing: 1px;
-    }
-
-    .menu-btn {
-        padding: 9px 11px;
-        font-size: 14px;
-        gap: 10px;
-        margin-bottom: 4px;
-    }
-
-    .menu-btn-icon {
-        width: 32px;
-        height: 32px;
-        font-size: 15px;
-        border-radius: 9px;
-    }
-
-    .sidebar-tip {
-        padding: 12px 14px;
-        border-radius: 12px;
-    }
-
-    .sidebar-tip-header {
-        margin-bottom: 6px;
-        gap: 6px;
-    }
-
-    .sidebar-tip-icon { font-size: 16px; }
-
-    .sidebar-tip-title {
-        font-size: 10px;
-        letter-spacing: 1px;
-    }
-
-    .sidebar-tip-text {
-        font-size: 11px;
-        line-height: 1.4;
-    }
-}
-
-@media (max-width: 380px) {
-    .sidebar {
-        width: 250px;
-        padding: 18px 12px 14px;
-    }
-
-    .menu-btn {
-        font-size: 13px;
-        padding: 8px 10px;
-    }
-
-    .menu-btn-icon {
-        width: 30px;
-        height: 30px;
-        font-size: 14px;
-    }
-
-    .sidebar-logo-icon {
-        width: 46px;
-        height: 46px;
-        font-size: 22px;
-    }
-
-    .sidebar-logo .logo { font-size: 18px; }
-
-    .sidebar-tip {
-        padding: 10px 12px;
-    }
-
-    .sidebar-tip-text { font-size: 10px; }
 }
 
 /* =========================================
@@ -2666,4 +2426,91 @@ body.bg-paused {
     color: #ffffff !important;
     transform: scale(1.06) translateY(-1px) !important;
     box-shadow: 0 8px 22px rgba(239, 68, 68, 0.45) !important;
+}
+
+/* =========================================
+   ІДЕАЛЬНА РАМКА ДЛЯ ЧАТУ (БЕЗ БІЛОГО ФОНУ)
+========================================= */
+
+.chat-box {
+    position: relative !important;
+    background-color: rgba(10, 16, 34, 0.95) !important;
+    border: 15px solid transparent !important;
+    border-radius: 20px !important;
+    
+    /* Накладаємо вашу картинку як фонову рамку з відступом */
+    border-image: url('/static/images/legal_frame.png') 30 round !important;
+    
+    /* Прибираємо білий фон за допомогою ефекту світіння/прозорості */
+    filter: drop-shadow(0 0 10px rgba(168, 85, 247, 0.5));
+}
+
+.clock-box {
+    border: 1px solid rgba(139, 92, 246, 0.3);
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.4), inset 0 0 10px rgba(139, 92, 246, 0.1);
+}
+
+.news-item {
+    transition: all 0.3s ease;
+}
+.news-item:hover {
+    transform: translateX(4px);
+}
+.news-item a:hover {
+    color: #c4b5fd;
+}
+
+/* =========================================
+   КОМПАКТНІ КНОПКИ ЕКСПОРТУ В БЛОЦІ ВВОДУ
+========================================= */
+
+.btn-export-icon {
+    width: 64px !important;
+    height: auto !important;
+    min-height: 100% !important;
+    flex-shrink: 0 !important;
+    border-radius: 14px !important;
+    font-size: 20px !important;
+    cursor: pointer !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    transition: all 0.25s ease !important;
+    box-sizing: border-box !important;
+}
+
+/* Кнопка PDF (фіолетовий неоновий акцент) */
+.btn-pdf {
+    border: 1.5px solid rgba(139, 92, 246, 0.5) !important;
+    background: rgba(139, 92, 246, 0.15) !important;
+    box-shadow: 0 4px 15px rgba(139, 92, 246, 0.2) !important;
+}
+
+.btn-pdf:hover {
+    background: rgba(139, 92, 246, 0.35) !important;
+    border-color: #a78bfa !important;
+    transform: scale(1.06) translateY(-1px) !important;
+    box-shadow: 0 8px 22px rgba(139, 92, 246, 0.45) !important;
+}
+
+/* Кнопка DOCX (синій неоновий акцент) */
+.btn-docx {
+    border: 1.5px solid rgba(59, 130, 246, 0.5) !important;
+    background: rgba(59, 130, 246, 0.15) !important;
+    box-shadow: 0 4px 15px rgba(59, 130, 246, 0.2) !important;
+}
+
+.btn-docx:hover {
+    background: rgba(59, 130, 246, 0.35) !important;
+    border-color: #60a5fa !important;
+    transform: scale(1.06) translateY(-1px) !important;
+    box-shadow: 0 8px 22px rgba(59, 130, 246, 0.45) !important;
+}
+
+/* Мобільна адаптація */
+@media (max-width: 768px) {
+    .btn-export-icon {
+        width: 48px;
+        font-size: 18px;
+    }
 }

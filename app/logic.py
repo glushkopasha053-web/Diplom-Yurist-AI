@@ -2,8 +2,6 @@
 # ЛОГІКА AI
 # ============================================
 
-from app.database import search_knowledge
-
 from app.gpt_memory import ask_gpt
 from app.config import USE_GPT
 
@@ -19,78 +17,31 @@ def process_user_message(message, session_id="default"):
     print("СЕСІЯ:", session_id)
 
     # ============================================
-    # 1. ПОШУК У БАЗІ
+    # 1. ЛОКАЛЬНА БАЗА ВИМКНЕНА
     # ============================================
-
-    result = search_knowledge(message.lower())
-
-    print("РЕЗУЛЬТАТ БАЗИ:", result)
-
     db_content = None
 
-    if result:
-        db_content = result[0]   # content з бази
-
     # ============================================
-    # 2. GPT (завжди, якщо увімкнено)
+    # 2. ЗАПИТ ДО GPT (з пам'яттю діалогу)
     # ============================================
 
     if not USE_GPT:
-
-        # Якщо GPT вимкнено — показуємо тільки базу
-        if db_content:
-            return f"""
-📚 Знайдено у локальній базі:
-
-{db_content}
-"""
         return "❌ GPT вимкнено адміністратором."
 
     print("GPT ЗАПУЩЕНО")
 
     try:
-
+        # Отримуємо чисту відповідь від AI з урахуванням історії
         gpt_answer = ask_gpt(
             user_message=message,
-            session_id=session_id,
-            context_from_db=db_content
+            session_id=session_id
         )
 
     except Exception as error:
-
-        # Якщо GPT впав, але є база — повертаємо базу
-        if db_content:
-            return f"""
-📚 Знайдено у локальній базі:
-
-{db_content}
-
-⚠ GPT тимчасово недоступний:
-{error}
-"""
-
         return f"❌ Помилка GPT:\n{error}"
 
     # ============================================
-    # 3. ФОРМУЄМО КОМБІНОВАНУ ВІДПОВІДЬ
+    # 3. ПОВЕРТАЄМО ЧИСТУ ВІДПОВІДЬ
     # ============================================
 
-    if db_content:
-        return f"""
-📚 З локальної бази:
-
-{db_content}
-
-━━━━━━━━━━━━━━━━━━━━━━
-
-🤖 Відповідь GPT:
-
-{gpt_answer}
-"""
-
-    # Якщо база нічого не знайшла — тільки GPT
-    return f"""
-🤖 Відповідь GPT:
-
-{gpt_answer}
-"""
+    return gpt_answer
