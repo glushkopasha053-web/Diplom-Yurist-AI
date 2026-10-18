@@ -1172,6 +1172,11 @@ body::before {
         width: 100%;
     }
 
+    .sidebar {
+        width: 85vw !important;
+        max-width: 320px !important;
+    }
+
 }
 
 /* =========================
