@@ -1173,8 +1173,35 @@ body::before {
     }
 
     .sidebar {
-        width: 85vw !important;
-        max-width: 320px !important;
+        width: 100% !important;
+        max-width: 280px !important;
+        left: -100% !important;
+        overflow-y: auto !important; /* Вмикає прокрутку виключно для мобільного */
+    }
+
+    .sidebar.active {
+        left: 0 !important;
+    }
+
+    /* Робіть меню компактнішим тільки на телефоні, на ПК все залишиться без змін */
+    .menu-btn {
+        padding: 10px 12px !important;
+        margin-bottom: 6px !important;
+        font-size: 16px !important;
+    }
+
+    .sidebar-logo-icon {
+        width: 48px !important;
+        height: 48px !important;
+        font-size: 22px !important;
+    }
+
+    .sidebar-logo .logo {
+        font-size: 22px !important;
+    }
+
+    .sidebar-tip {
+        padding: 12px 14px !important;
     }
 
 }
