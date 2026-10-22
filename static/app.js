@@ -364,6 +364,15 @@ function addMessage(text, sender) {
     messageDiv.appendChild(avatar);
     messageDiv.appendChild(content);
 
+if (sender !== "user") {
+        const copyBtn = document.createElement("button");
+        copyBtn.className = "copy-btn";
+        copyBtn.innerHTML = "📋";
+        copyBtn.title = "Скопіювати текст";
+        copyBtn.onclick = function() { copyMessageText(this); };
+        messageDiv.appendChild(copyBtn);
+    }
+
     chatBox.appendChild(messageDiv);
     chatBox.scrollTop = chatBox.scrollHeight;
 
@@ -1889,4 +1898,32 @@ async function exportChat(format) {
         console.error("Помилка при експорті:", error);
         alert("Сталася помилка при завантаженні файла.");
     }
+}
+
+
+/* =========================================
+   ФУНКЦІЯ КОПІЮВАННЯ ТЕКСТУ В БУФЕР ОБМІНУ
+========================================= */
+function copyMessageText(button) {
+    const messageContent = button.parentElement.querySelector('.message-content');
+    if (!messageContent) return;
+
+    const textToCopy = messageContent.innerText;
+
+    navigator.clipboard.writeText(textToCopy).then(() => {
+        // Зберігаємо початковий іконку/текст
+        const originalText = button.innerHTML;
+        
+        // Змінюємо текст на підказку
+        button.innerHTML = '✓ Скопійовано!';
+        button.classList.add('copied');
+
+        // Через 2 секунди повертаємо назад іконку
+        setTimeout(() => {
+            button.innerHTML = originalText;
+            button.classList.remove('copied');
+        }, 2000);
+    }).catch(err => {
+        console.error('Помилка копіювання: ', err);
+    });
 }

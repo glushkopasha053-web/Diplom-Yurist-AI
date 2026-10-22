@@ -2678,3 +2678,44 @@ body.bg-paused {
     }
 }
 
+
+/* =========================================
+   КНОПКА КОПІЮВАННЯ В ПОВІДОМЛЕННЯХ
+========================================= */
+.bot-message {
+    position: relative !important;
+    padding-right: 60px !important; /* Місце під кнопку копіювання */
+}
+
+.copy-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 10px;
+    color: #cbd5e1;
+    font-size: 18px;
+    padding: 8px 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+}
+
+.copy-btn:hover {
+    background: rgba(139, 92, 246, 0.3);
+    border-color: rgba(139, 92, 246, 0.5);
+    color: #ffffff;
+    transform: scale(1.05);
+}
+
+.copy-btn.copied {
+    background: rgba(34, 197, 94, 0.25) !important;
+    border-color: rgba(34, 197, 94, 0.5) !important;
+    color: #4ade80 !important;
+    font-size: 11px;
+    font-weight: 600;
+}
